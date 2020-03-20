@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import {
   UserOutlined,
   LaptopOutlined,
@@ -27,9 +28,15 @@ function Sidebar() {
             </span>
           }
         >
-          <Menu.Item key="1">수능</Menu.Item>
-          <Menu.Item key="2">영어단어집</Menu.Item>
-          <Menu.Item key="3">토익</Menu.Item>
+          <Menu.Item key="1">
+            <Link to="/solve/영어단어/수능">수능</Link>
+          </Menu.Item>
+          <Menu.Item key="2">
+            <Link to="/solve/영어단어/영어단어집">영어단어집</Link>
+          </Menu.Item>
+          <Menu.Item key="3">
+            <Link to="/solve/영어단어/토익">토익</Link>
+          </Menu.Item>
         </SubMenu>
         <SubMenu
           key="sub2"
