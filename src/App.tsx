@@ -1,10 +1,12 @@
 import React from 'react';
-import { BrowserRouter } from 'react-router-dom';
+import { BrowserRouter, Route, Switch } from 'react-router-dom';
 import { Layout } from 'antd';
 import Header from './components/Header';
 import './css/App.css';
 import Sidebar from './components/Sidebar';
-import Content from './components/Content';
+import Home from './pages/Home';
+import Question from './pages/Question';
+import NotFound from './pages/NotFound';
 
 function App() {
   return (
@@ -13,7 +15,11 @@ function App() {
         <Header />
         <Layout>
           <Sidebar />
-          <Content />
+          <Switch>
+            <Route exact path="/" component={Home} />
+            <Route path="/solve/:domain/:subdomain" component={Question} />
+            <Route component={NotFound} />
+          </Switch>
         </Layout>
       </Layout>
     </BrowserRouter>
