@@ -17,10 +17,16 @@ function App() {
           <Sidebar />
           <Switch>
             <Route exact path="/" component={Home} />
-            <Route path="/solve/:domain/:subdomain" component={Question} />
+            <Route
+              path="/solve/:domain/:subdomain/:qNumber"
+              component={Question}
+            />
             <Route component={NotFound} />
           </Switch>
         </Layout>
+        <Layout.Footer style={{ textAlign: 'center' }}>
+          암기왕 ©2019 Created by 용크셔
+        </Layout.Footer>
       </Layout>
     </BrowserRouter>
   );

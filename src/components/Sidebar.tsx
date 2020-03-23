@@ -29,13 +29,13 @@ function Sidebar() {
           }
         >
           <Menu.Item key="1">
-            <Link to="/solve/영어단어/수능">수능</Link>
+            <Link to="/solve/영어단어/수능/1">수능</Link>
           </Menu.Item>
           <Menu.Item key="2">
-            <Link to="/solve/영어단어/영어단어집">영어단어집</Link>
+            <Link to="/solve/영어단어/영어단어집/1">영어단어집</Link>
           </Menu.Item>
           <Menu.Item key="3">
-            <Link to="/solve/영어단어/토익">토익</Link>
+            <Link to="/solve/영어단어/토익/1">토익</Link>
           </Menu.Item>
         </SubMenu>
         <SubMenu
