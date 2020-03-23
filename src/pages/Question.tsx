@@ -9,12 +9,23 @@ type QuestionProps = {
 
 function Question({ match, location }: QuestionProps) {
   const [rating, setRating] = useState<number>(3);
+  const [visible, setVisible] = useState<boolean>(false);
 
   let task;
   if (location.pathname.split('/')[1] === 'solve') {
     task = '문제 풀기';
   } else {
     task = '문제 등록';
+  }
+
+  let answerVisible;
+  let answerButton;
+  if (!visible) {
+    answerVisible = 'none';
+    answerButton = '정답 확인';
+  } else {
+    answerVisible = '';
+    answerButton = '정답 가리기';
   }
 
   const desc = ['terrible', 'bad', 'normal', 'good', 'wonderful'];
@@ -43,7 +54,15 @@ function Question({ match, location }: QuestionProps) {
           </Col>
           <Col className="gutter-row" span={12}>
             <div style={{ padding: '8px 0' }}>답</div>
-            <div style={{ border: '1px solid gray', padding: '8px 0' }}>책</div>
+            <div
+              style={{
+                border: '1px solid gray',
+                padding: '8px 0',
+                display: answerVisible,
+              }}
+            >
+              책
+            </div>
           </Col>
         </Row>
       </Layout.Content>
@@ -58,7 +77,7 @@ function Question({ match, location }: QuestionProps) {
         <Button>
           <Link to={`${Number(match.params.qNumber) + 1}`}>다음</Link>
         </Button>
-        <Button>정답 확인</Button>
+        <Button onClick={() => setVisible(!visible)}>{answerButton}</Button>
       </Layout.Footer>
     </Layout>
   );
