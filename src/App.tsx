@@ -1,6 +1,7 @@
-import React from 'react';
+/** @jsx jsx */
 import { BrowserRouter, Route, Switch } from 'react-router-dom';
 import { Layout } from 'antd';
+import { css, jsx } from '@emotion/core';
 import Header from './components/Header';
 import './css/App.css';
 import Sidebar from './components/Sidebar';
@@ -8,10 +9,19 @@ import Home from './pages/Home';
 import Question from './pages/Question';
 import NotFound from './pages/NotFound';
 
+const wrapper = css`
+  height: 100vh;
+`;
+
+const footerCss = css`
+  text-align: center;
+  background-color: #999999;
+`;
+
 function App() {
   return (
     <BrowserRouter>
-      <Layout>
+      <Layout css={wrapper}>
         <Header />
         <Layout>
           <Sidebar />
@@ -24,8 +34,8 @@ function App() {
             <Route component={NotFound} />
           </Switch>
         </Layout>
-        <Layout.Footer style={{ textAlign: 'center' }}>
-          암기왕 ©2019 Created by 용크셔
+        <Layout.Footer css={footerCss}>
+          암기왕 ©2020 Created by 용크셔
         </Layout.Footer>
       </Layout>
     </BrowserRouter>
