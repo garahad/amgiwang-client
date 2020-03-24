@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Layout, Breadcrumb, Button, Row, Col, Rate } from 'antd';
+import questions from '../fakeData';
 
 type QuestionProps = {
   match: any;
@@ -8,7 +9,7 @@ type QuestionProps = {
 };
 
 function Question({ match, location }: QuestionProps) {
-  const [rating, setRating] = useState<number>(3);
+  // const [rating, setRating] = useState<number>(3);
   const [visible, setVisible] = useState<boolean>(false);
 
   let task;
@@ -30,6 +31,13 @@ function Question({ match, location }: QuestionProps) {
 
   const desc = ['terrible', 'bad', 'normal', 'good', 'wonderful'];
 
+  const qList = questions.filter((elm) => {
+    return (
+      elm.domain === match.params.domain &&
+      elm.subdomain === match.params.subdomain
+    );
+  });
+
   return (
     <Layout style={{ padding: '0 24px 24px' }}>
       <Breadcrumb style={{ margin: '16px 0' }}>
@@ -49,7 +57,11 @@ function Question({ match, location }: QuestionProps) {
           <Col className="gutter-row" span={12}>
             <div style={{ padding: '8px 0' }}>문제</div>
             <div style={{ border: '1px solid gray', padding: '8px 0' }}>
-              book
+              {
+                qList.filter(
+                  (elm) => elm.number === Number(match.params.qNumber),
+                )[0].question
+              }
             </div>
           </Col>
           <Col className="gutter-row" span={12}>
@@ -61,7 +73,11 @@ function Question({ match, location }: QuestionProps) {
                 display: answerVisible,
               }}
             >
-              책
+              {
+                qList.filter(
+                  (elm) => elm.number === Number(match.params.qNumber),
+                )[0].answer
+              }
             </div>
           </Col>
         </Row>
@@ -69,12 +85,23 @@ function Question({ match, location }: QuestionProps) {
       <Layout.Footer style={{ textAlign: 'center' }}>
         <span>중요도</span>
         <span>
-          <Rate tooltips={desc} onChange={setRating} value={rating} />
+          <Rate
+            tooltips={desc}
+            // onChange={setRating}
+            value={
+              qList.filter(
+                (elm) => elm.number === Number(match.params.qNumber),
+              )[0].importance
+            }
+          />
         </span>
-        <Button>
+        <Button
+          onClick={() => setVisible(false)}
+          disabled={Number(match.params.qNumber) <= 1}
+        >
           <Link to={`${Number(match.params.qNumber) - 1}`}>이전</Link>
         </Button>
-        <Button>
+        <Button onClick={() => setVisible(false)}>
           <Link to={`${Number(match.params.qNumber) + 1}`}>다음</Link>
         </Button>
         <Button onClick={() => setVisible(!visible)}>{answerButton}</Button>
