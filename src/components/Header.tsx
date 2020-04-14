@@ -1,4 +1,5 @@
 /** @jsx jsx */
+import { Link } from 'react-router-dom';
 import { Layout, Menu } from 'antd';
 import { css, jsx } from '@emotion/core';
 import '../css/App.css';
@@ -11,7 +12,7 @@ function Header() {
   return (
     <Layout.Header className="header">
       <div className="logo" css={logoCss}>
-        암기왕
+        <Link to="/">암기왕</Link>
       </div>
 
       <Menu

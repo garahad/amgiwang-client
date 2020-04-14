@@ -3,7 +3,7 @@ import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { css, jsx } from '@emotion/core';
 import { Layout, Breadcrumb, Button, Row, Col, Rate } from 'antd';
-import questions from '../fakeData';
+import { questions } from '../fakeData';
 
 const wrapper = css`
   padding: 0 24px 24px;
