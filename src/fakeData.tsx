@@ -1,4 +1,10 @@
-const questions = [
+export const categories = [
+  { 영어단어: ['수능', '영어단어집', '토익'] },
+  { 의대암기: ['근골격', 'CNS', '소아재활'] },
+  { 그외암기: ['코딩', '투자', '명언'] },
+];
+
+export const questions = [
   {
     domain: '영어단어',
     subdomain: '수능',
@@ -40,5 +46,3 @@ const questions = [
     answer: '펜',
   },
 ];
-
-export default questions;
