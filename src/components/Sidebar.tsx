@@ -10,13 +10,13 @@ const { Sider } = Layout;
 function Sidebar() {
   return (
     <Sider width={200} className="site-layout-background">
+      <Button>+</Button>
       <Menu
         mode="inline"
         defaultSelectedKeys={['1']}
         defaultOpenKeys={['sub1']}
         style={{ height: '100%', borderRight: 0 }}
       >
-        <Button>+</Button>
         {categories.map((elm, key) => (
           <SubMenu
             key={key}
