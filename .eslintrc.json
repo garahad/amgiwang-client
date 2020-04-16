@@ -29,16 +29,13 @@
     "ecmaVersion": 2018,
     "sourceType": "module"
   },
-  "plugins": [
-    "react",
-    "@typescript-eslint",
-    "prettier"
-  ],
+  "plugins": ["react", "@typescript-eslint", "prettier"],
   "rules": {
     "react/jsx-filename-extension": 0,
     "array-callback-return": "off",
     "react/jsx-props-no-spreading": "off",
     "import/no-unresolved": "off",
+    "import/prefer-default-export": [0],
     "import/extensions": [
       "error",
       "ignorePackages",
