@@ -3,7 +3,9 @@ import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { css, jsx } from '@emotion/core';
 import { Layout, Breadcrumb, Button, Row, Col, Rate } from 'antd';
+import { useQuery } from '@apollo/react-hooks';
 import { questions } from '../fakeData';
+import { GET_QUESTIONS } from '../graphql/queries';
 
 const wrapper = css`
   padding: 0 24px 24px;
@@ -56,6 +58,21 @@ function Question({ match, location }: QuestionProps) {
   // const [rating, setRating] = useState<number>(3);
   const [visible, setVisible] = useState<boolean>(false);
 
+  const { data, error } = useQuery(GET_QUESTIONS, {
+    variables: { id: 1 },
+  });
+
+  if (error) console.log('questoins', questions);
+  if (data) console.log('data', data);
+
+  const importanceObj = {
+    ONE: 1,
+    TWO: 2,
+    THREE: 3,
+    FOUR: 4,
+    FIVE: 5,
+  };
+
   let task;
   if (location.pathname.split('/')[1] === 'solve') {
     task = '문제 풀기';
@@ -75,12 +92,22 @@ function Question({ match, location }: QuestionProps) {
 
   const desc = ['terrible', 'bad', 'normal', 'good', 'wonderful'];
 
-  const qList = questions.filter((elm) => {
-    return (
-      elm.domain === match.params.domain &&
-      elm.subdomain === match.params.subdomain
+  let qList;
+  if (data) {
+    qList = data.getQuestions.filter(
+      (elm) =>
+        elm.category.domain === match.params.domain &&
+        elm.category.subdomain === match.params.subdomain,
     );
-  });
+  } else {
+    qList = questions.filter(
+      (elm) =>
+        elm.domain === match.params.domain &&
+        elm.subdomain === match.params.subdomain,
+    );
+  }
+
+  if (qList.length === 0) return null;
 
   return (
     <Layout css={wrapper}>
@@ -105,8 +132,8 @@ function Question({ match, location }: QuestionProps) {
             <div css={questionInput}>
               {
                 qList.filter(
-                  (elm) => elm.number === Number(match.params.qNumber),
-                )[0].question
+                  (_, key) => Number(key) === Number(match.params.qNumber),
+                )[0].questionContent
               }
             </div>
           </Col>
@@ -120,7 +147,7 @@ function Question({ match, location }: QuestionProps) {
               >
                 {
                   qList.filter(
-                    (elm) => elm.number === Number(match.params.qNumber),
+                    (_, key) => Number(key) === Number(match.params.qNumber),
                   )[0].answer
                 }
               </span>
@@ -138,9 +165,11 @@ function Question({ match, location }: QuestionProps) {
                 tooltips={desc}
                 // onChange={setRating}
                 value={
-                  qList.filter(
-                    (elm) => elm.number === Number(match.params.qNumber),
-                  )[0].importance
+                  importanceObj[
+                    qList.filter(
+                      (_, key) => Number(key) === Number(match.params.qNumber),
+                    )[0].importance
+                  ]
                 }
               />
             </span>
