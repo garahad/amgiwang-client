@@ -62,9 +62,6 @@ function Question({ match, location }: QuestionProps) {
     variables: { id: 1 },
   });
 
-  if (error) console.log('questoins', questions);
-  if (data) console.log('data', data);
-
   const importanceObj = {
     ONE: 1,
     TWO: 2,
@@ -72,6 +69,8 @@ function Question({ match, location }: QuestionProps) {
     FOUR: 4,
     FIVE: 5,
   };
+
+  if (error) console.log(error);
 
   let task;
   if (location.pathname.split('/')[1] === 'solve') {
@@ -132,7 +131,7 @@ function Question({ match, location }: QuestionProps) {
             <div css={questionInput}>
               {
                 qList.filter(
-                  (_, key) => Number(key) === Number(match.params.qNumber),
+                  (_, key) => Number(key + 1) === Number(match.params.qNumber),
                 )[0].questionContent
               }
             </div>
@@ -147,7 +146,8 @@ function Question({ match, location }: QuestionProps) {
               >
                 {
                   qList.filter(
-                    (_, key) => Number(key) === Number(match.params.qNumber),
+                    (_, key) =>
+                      Number(key + 1) === Number(match.params.qNumber),
                   )[0].answer
                 }
               </span>
@@ -167,7 +167,8 @@ function Question({ match, location }: QuestionProps) {
                 value={
                   importanceObj[
                     qList.filter(
-                      (_, key) => Number(key) === Number(match.params.qNumber),
+                      (_, key) =>
+                        Number(key + 1) === Number(match.params.qNumber),
                     )[0].importance
                   ]
                 }
