@@ -4,7 +4,6 @@ import { Link } from 'react-router-dom';
 import { css, jsx } from '@emotion/core';
 import { Layout, Breadcrumb, Button, Row, Col, Rate } from 'antd';
 import { useQuery } from '@apollo/react-hooks';
-import { questions } from '../fakeData';
 import { GET_QUESTIONS } from '../graphql/queries';
 
 const wrapper = css`
@@ -99,11 +98,7 @@ function Question({ match, location }: QuestionProps) {
         elm.category.subdomain === match.params.subdomain,
     );
   } else {
-    qList = questions.filter(
-      (elm) =>
-        elm.domain === match.params.domain &&
-        elm.subdomain === match.params.subdomain,
-    );
+    qList = [];
   }
 
   if (qList.length === 0) return null;
@@ -132,7 +127,7 @@ function Question({ match, location }: QuestionProps) {
               {
                 qList.filter(
                   (_, key) => Number(key + 1) === Number(match.params.qNumber),
-                )[0].questionContent
+                )[0]!.questionContent
               }
             </div>
           </Col>
