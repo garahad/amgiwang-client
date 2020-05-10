@@ -40,3 +40,27 @@ export const GET_QUESTIONS = gql`
     }
   }
 `;
+
+export const ADD_CATEGORY = gql`
+  mutation AddCategory($user: Int!, $domain: String!, $subdomain: String) {
+    addCategory(user: $user, domain: $domain, subdomain: $subdomain)
+  }
+`;
+
+export const ADD_QUESTION = gql`
+  mutation AddQuestion(
+    $owner: Int!
+    $category: Int!
+    $importance: ImportanceEnum!
+    $questionContent: String!
+    $answer: String!
+  ) {
+    addQuestion(
+      owner: $owner
+      category: $category
+      importance: $importance
+      questionContent: $questionContent
+      answer: $answer
+    )
+  }
+`;
