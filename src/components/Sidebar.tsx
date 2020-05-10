@@ -2,13 +2,15 @@ import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { UserOutlined } from '@ant-design/icons';
 import { Layout, Button } from 'antd';
-import { useQuery } from '@apollo/react-hooks';
+import { useQuery, useMutation } from '@apollo/react-hooks';
 
-import { GET_CATEGORIES } from '../graphql/queries';
+import { GET_CATEGORIES, ADD_CATEGORY } from '../graphql/queries';
 
 const { Sider } = Layout;
 
 function Sidebar() {
+  let categories;
+
   const { data: dataCategories } = useQuery(GET_CATEGORIES, {
     variables: { id: 1 },
   });
@@ -16,21 +18,26 @@ function Sidebar() {
   const [categoryAdded, setCategoryAdded] = useState<any>(null);
   const [domainVisible, setDomainVisible] = useState<boolean[]>([]);
   const [subdomainInputs, setSubdomainInputs] = useState<boolean[]>([]);
-  const [nowAdding, setNowAdding] = useState<string>('');
+  const [newDomain, setNewDomain] = useState<string>('');
+  const [newSubdomain, setNewSubdomain] = useState<string>('');
+  const [addCategory] = useMutation(ADD_CATEGORY, {
+    refetchQueries: [{ query: GET_CATEGORIES, variables: { id: 1 } }],
+    onCompleted: () => {
+      setDomainVisible(domainVisible.concat(true));
+      setSubdomainInputs(subdomainInputs.concat(false));
+    },
+  });
 
   // console.log('dataCategories', dataCategories);
   // console.log('subdomainInputs', subdomainInputs);
-  // console.log('nowAdding', nowAdding);
-
-  let categories;
+  // console.log('domainVisible', domainVisible);
 
   useEffect(() => {
-    if (categories && categories.length > 0) {
-      console.log('hello');
-      setSubdomainInputs(Array(categories.length).fill(false));
+    if (categories && categories.length > 0 && domainVisible.length === 0) {
       setDomainVisible(Array(categories.length).fill(false));
+      setSubdomainInputs(Array(categories.length).fill(false));
     }
-  }, [categories, dataCategories]);
+  }, [categories, dataCategories, domainVisible]);
 
   if (dataCategories && dataCategories.getCategories) {
     const categoryDomains = Array.from(
@@ -57,21 +64,18 @@ function Sidebar() {
             setCategoryAdded(
               <span>
                 <UserOutlined />
-                <input type="text" placeholder="입력" />
-                <Button
-                  onClick={() => {
-                    setCategoryAdded(null);
-                  }}
-                >
-                  추가
-                </Button>
-                <Button onClick={() => setCategoryAdded(null)}>취소</Button>
+                <input
+                  type="text"
+                  placeholder="카테고리 입력"
+                  onChange={(e) => setNewDomain(e.target.value)}
+                />
               </span>,
             );
           }}
         >
           +
         </Button>
+
         <ul>
           {categories.map((elm, key) => (
             <ul key={key}>
@@ -119,26 +123,48 @@ function Sidebar() {
                 +
               </Button>
               {domainVisible[key]
-                ? Object.values<any>(elm)[0]!.map((ele) => (
-                    // ts 이해 부족
-                    <li key={ele} style={{ marginLeft: '30px' }}>
-                      <Link to={`/solve/${Object.keys(elm)[0]}/${ele}/1`}>
-                        {ele}
-                      </Link>
-                      <Button onClick={() => console.log('문제추가')}>+</Button>
-                    </li>
-                  ))
+                ? Object.values<any>(elm)[0]!.map((ele) => {
+                    if (ele.length > 0) {
+                      return (
+                        // ts 이해 부족
+                        <li key={ele} style={{ marginLeft: '30px' }}>
+                          <Link to={`/solve/${Object.keys(elm)[0]}/${ele}/1`}>
+                            {ele}
+                          </Link>
+                          <Button onClick={() => console.log('문제추가')}>
+                            +
+                          </Button>
+                        </li>
+                      );
+                    }
+                    return null;
+                  })
                 : null}
               {domainVisible[key] && subdomainInputs[key] ? (
                 <span>
                   <input
                     type="text"
-                    placeholder="입력"
+                    placeholder="세부 카테고리 입력"
                     style={{ marginLeft: '15px' }}
+                    onChange={(e) => setNewSubdomain(e.target.value)}
                   />
                   <Button
                     onClick={() => {
-                      console.log('저장');
+                      addCategory({
+                        variables: {
+                          user: 1,
+                          domain: Object.keys(categories[key])[0],
+                          subdomain: newSubdomain,
+                        },
+                      });
+                      setSubdomainInputs(
+                        subdomainInputs.map((elme, elmKey) => {
+                          if (key === elmKey) {
+                            return false;
+                          }
+                          return elme;
+                        }),
+                      );
                     }}
                   >
                     저장
@@ -162,6 +188,25 @@ function Sidebar() {
             </ul>
           ))}
           {categoryAdded}
+          <span
+            style={categoryAdded ? { display: 'inline' } : { display: 'none' }}
+          >
+            <Button
+              onClick={() => {
+                setCategoryAdded(null);
+                addCategory({
+                  variables: {
+                    user: 1,
+                    domain: newDomain,
+                    subdomain: '',
+                  },
+                });
+              }}
+            >
+              추가
+            </Button>
+            <Button onClick={() => setCategoryAdded(null)}>취소</Button>
+          </span>
         </ul>
       </Sider>
     );
