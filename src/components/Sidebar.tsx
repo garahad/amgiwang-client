@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { Link } from 'react-router-dom';
 import { UserOutlined } from '@ant-design/icons';
 import { Layout, Button } from 'antd';
@@ -11,15 +11,16 @@ const { Sider } = Layout;
 function Sidebar() {
   let categories;
 
-  const { data: dataCategories } = useQuery(GET_CATEGORIES, {
-    variables: { id: 1 },
-  });
-
   const [categoryAdded, setCategoryAdded] = useState<any>(null);
   const [domainVisible, setDomainVisible] = useState<boolean[]>([]);
   const [subdomainInputs, setSubdomainInputs] = useState<boolean[]>([]);
   const [newDomain, setNewDomain] = useState<string>('');
   const [newSubdomain, setNewSubdomain] = useState<string>('');
+  const inputEl = useRef() as any;
+
+  const { data: dataCategories } = useQuery(GET_CATEGORIES, {
+    variables: { id: 1 },
+  });
   const [addCategory] = useMutation(ADD_CATEGORY, {
     refetchQueries: [{ query: GET_CATEGORIES, variables: { id: 1 } }],
     onCompleted: () => {
@@ -31,6 +32,7 @@ function Sidebar() {
   // console.log('dataCategories', dataCategories);
   // console.log('subdomainInputs', subdomainInputs);
   // console.log('domainVisible', domainVisible);
+  console.log('inputEl', inputEl);
 
   useEffect(() => {
     if (categories && categories.length > 0 && domainVisible.length === 0) {
@@ -38,6 +40,13 @@ function Sidebar() {
       setSubdomainInputs(Array(categories.length).fill(false));
     }
   }, [categories, dataCategories, domainVisible]);
+
+  // 비동기 문제 때문에 setTimeout 쓰는 대신에 useEffect 써서 처리
+  useEffect(() => {
+    if (inputEl && inputEl.current) {
+      inputEl.current!.focus();
+    }
+  }, [inputEl, categoryAdded, subdomainInputs]);
 
   if (dataCategories && dataCategories.getCategories) {
     const categoryDomains = Array.from(
@@ -55,7 +64,7 @@ function Sidebar() {
   }
 
   if (categories && categories.length > 0) {
-    console.log('categories', categories);
+    // console.log('categories', categories);
     return (
       <Sider width={400} className="site-layout-background">
         {/* domain 추가 버튼 */}
@@ -65,12 +74,28 @@ function Sidebar() {
               <span>
                 <UserOutlined />
                 <input
+                  ref={inputEl}
                   type="text"
                   placeholder="카테고리 입력"
                   onChange={(e) => setNewDomain(e.target.value)}
+                  onKeyDown={(e) => {
+                    if (e.keyCode === 13) {
+                      // 중복 제거해야
+                      setCategoryAdded(null);
+                      addCategory({
+                        variables: {
+                          user: 1,
+                          // 아래에서 newDomain으로 하면 인식이 안됨. e.target.value를 쓸 수 밖에. 이것도 한박자씩 늦게 입력되는 듯.
+                          domain: (e.target as HTMLInputElement).value,
+                          subdomain: '',
+                        },
+                      });
+                    }
+                  }}
                 />
               </span>,
             );
+            setSubdomainInputs(subdomainInputs.map((_) => false));
           }}
         >
           +
@@ -117,6 +142,7 @@ function Sidebar() {
                       return elme;
                     }),
                   );
+                  setCategoryAdded(null);
                   // setNowAdding(key);
                 }}
               >
@@ -144,9 +170,29 @@ function Sidebar() {
                 <span>
                   <input
                     type="text"
+                    ref={inputEl}
                     placeholder="세부 카테고리 입력"
                     style={{ marginLeft: '15px' }}
                     onChange={(e) => setNewSubdomain(e.target.value)}
+                    onKeyDown={(e) => {
+                      if (e.keyCode === 13) {
+                        addCategory({
+                          variables: {
+                            user: 1,
+                            domain: Object.keys(categories[key])[0],
+                            subdomain: (e.target as HTMLInputElement).value,
+                          },
+                        });
+                        setSubdomainInputs(
+                          subdomainInputs.map((elme, elmKey) => {
+                            if (key === elmKey) {
+                              return false;
+                            }
+                            return elme;
+                          }),
+                        );
+                      }
+                    }}
                   />
                   <Button
                     onClick={() => {
