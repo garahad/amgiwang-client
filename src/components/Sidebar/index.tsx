@@ -4,9 +4,13 @@ import { UserOutlined } from '@ant-design/icons';
 import { Layout, Button } from 'antd';
 import { useQuery, useMutation } from '@apollo/react-hooks';
 
-import { GET_CATEGORIES, ADD_CATEGORY } from '../graphql/queries';
+import { GET_CATEGORIES, ADD_CATEGORY } from '../../graphql/queries';
+import addDomain from './addDomain';
+import addSubdomain from './addSubdomain';
 
 const { Sider } = Layout;
+
+// hooks 빼기, //button 등 component들 빼기
 
 function Sidebar() {
   let categories;
@@ -29,11 +33,6 @@ function Sidebar() {
     },
   });
 
-  // console.log('dataCategories', dataCategories);
-  // console.log('subdomainInputs', subdomainInputs);
-  // console.log('domainVisible', domainVisible);
-  console.log('inputEl', inputEl);
-
   useEffect(() => {
     if (categories && categories.length > 0 && domainVisible.length === 0) {
       setDomainVisible(Array(categories.length).fill(false));
@@ -49,15 +48,15 @@ function Sidebar() {
   }, [inputEl, categoryAdded, subdomainInputs]);
 
   if (dataCategories && dataCategories.getCategories) {
-    const categoryDomains = Array.from(
+    const domains = Array.from(
       new Set(dataCategories.getCategories.map((elm) => elm.domain)),
     );
-    const subDomains = categoryDomains.map((): any[] => []);
+    const subDomains = domains.map((): any[] => []);
     dataCategories.getCategories.forEach((elm) => {
-      const domainIdx = categoryDomains.indexOf(elm.domain);
+      const domainIdx = domains.indexOf(elm.domain);
       subDomains[domainIdx].push(elm.subdomain);
     });
-    categories = categoryDomains.map((elm, key) => {
+    categories = domains.map((elm, key) => {
       return { [elm as any]: subDomains[key] };
       // ts 이해 부족
     });
@@ -80,22 +79,18 @@ function Sidebar() {
                   onChange={(e) => setNewDomain(e.target.value)}
                   onKeyDown={(e) => {
                     if (e.keyCode === 13) {
-                      // 중복 제거해야
-                      setCategoryAdded(null);
-                      addCategory({
-                        variables: {
-                          user: 1,
-                          // 아래에서 newDomain으로 하면 인식이 안됨. e.target.value를 쓸 수 밖에. 이것도 한박자씩 늦게 입력되는 듯.
-                          domain: (e.target as HTMLInputElement).value,
-                          subdomain: '',
-                        },
-                      });
+                      addDomain(
+                        setCategoryAdded,
+                        addCategory,
+                        1,
+                        (e.target as HTMLInputElement).value,
+                      );
                     }
                   }}
                 />
               </span>,
             );
-            setSubdomainInputs(subdomainInputs.map((_) => false));
+            setSubdomainInputs(subdomainInputs.map(() => false));
           }}
         >
           +
@@ -175,41 +170,30 @@ function Sidebar() {
                     style={{ marginLeft: '15px' }}
                     onChange={(e) => setNewSubdomain(e.target.value)}
                     onKeyDown={(e) => {
+                      // 아래 코드와 중복을 제거하는 문제
                       if (e.keyCode === 13) {
-                        addCategory({
-                          variables: {
-                            user: 1,
-                            domain: Object.keys(categories[key])[0],
-                            subdomain: (e.target as HTMLInputElement).value,
-                          },
-                        });
-                        setSubdomainInputs(
-                          subdomainInputs.map((elme, elmKey) => {
-                            if (key === elmKey) {
-                              return false;
-                            }
-                            return elme;
-                          }),
+                        addSubdomain(
+                          addCategory,
+                          1,
+                          categories,
+                          key,
+                          (e.target as HTMLInputElement).value,
+                          setSubdomainInputs,
+                          subdomainInputs,
                         );
                       }
                     }}
                   />
                   <Button
                     onClick={() => {
-                      addCategory({
-                        variables: {
-                          user: 1,
-                          domain: Object.keys(categories[key])[0],
-                          subdomain: newSubdomain,
-                        },
-                      });
-                      setSubdomainInputs(
-                        subdomainInputs.map((elme, elmKey) => {
-                          if (key === elmKey) {
-                            return false;
-                          }
-                          return elme;
-                        }),
+                      addSubdomain(
+                        addCategory,
+                        1,
+                        categories,
+                        key,
+                        newSubdomain,
+                        setSubdomainInputs,
+                        subdomainInputs,
                       );
                     }}
                   >
@@ -239,14 +223,7 @@ function Sidebar() {
           >
             <Button
               onClick={() => {
-                setCategoryAdded(null);
-                addCategory({
-                  variables: {
-                    user: 1,
-                    domain: newDomain,
-                    subdomain: '',
-                  },
-                });
+                addDomain(setCategoryAdded, addCategory, 1, newDomain);
               }}
             >
               추가
