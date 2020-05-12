@@ -14,6 +14,8 @@ const { Sider } = Layout;
 
 function Sidebar() {
   let categories;
+  let domains;
+  let subDomains;
 
   const [categoryAdded, setCategoryAdded] = useState<any>(null);
   const [domainVisible, setDomainVisible] = useState<boolean[]>([]);
@@ -48,10 +50,10 @@ function Sidebar() {
   }, [inputEl, categoryAdded, subdomainInputs]);
 
   if (dataCategories && dataCategories.getCategories) {
-    const domains = Array.from(
+    domains = Array.from(
       new Set(dataCategories.getCategories.map((elm) => elm.domain)),
     );
-    const subDomains = domains.map((): any[] => []);
+    subDomains = domains.map((): any[] => []);
     dataCategories.getCategories.forEach((elm) => {
       const domainIdx = domains.indexOf(elm.domain);
       subDomains[domainIdx].push(elm.subdomain);
@@ -64,6 +66,7 @@ function Sidebar() {
 
   if (categories && categories.length > 0) {
     // console.log('categories', categories);
+    console.log('newDomain', newDomain);
     return (
       <Sider width={400} className="site-layout-background">
         {/* domain 추가 버튼 */}
@@ -79,12 +82,22 @@ function Sidebar() {
                   onChange={(e) => setNewDomain(e.target.value)}
                   onKeyDown={(e) => {
                     if (e.keyCode === 13) {
-                      addDomain(
-                        setCategoryAdded,
-                        addCategory,
-                        1,
-                        (e.target as HTMLInputElement).value,
-                      );
+                      if ((e.target as HTMLInputElement).value.length === 0) {
+                        alert('카테고리 이름은 1글자 이상이어야 합니다');
+                      } else if (
+                        domains.indexOf(
+                          (e.target as HTMLInputElement).value,
+                        ) === -1
+                      ) {
+                        addDomain(
+                          setCategoryAdded,
+                          addCategory,
+                          1,
+                          (e.target as HTMLInputElement).value,
+                        );
+                      } else {
+                        alert('카테고리 이름 중복입니다');
+                      }
                     }
                   }}
                 />
@@ -138,7 +151,6 @@ function Sidebar() {
                     }),
                   );
                   setCategoryAdded(null);
-                  // setNowAdding(key);
                 }}
               >
                 +
@@ -172,29 +184,45 @@ function Sidebar() {
                     onKeyDown={(e) => {
                       // 아래 코드와 중복을 제거하는 문제
                       if (e.keyCode === 13) {
-                        addSubdomain(
-                          addCategory,
-                          1,
-                          categories,
-                          key,
-                          (e.target as HTMLInputElement).value,
-                          setSubdomainInputs,
-                          subdomainInputs,
-                        );
+                        if ((e.target as HTMLInputElement).value.length === 0) {
+                          alert('subdomain은 1글자 이상이어야 합니다');
+                        } else if (
+                          subDomains[key].indexOf(
+                            (e.target as HTMLInputElement).value,
+                          ) !== -1
+                        ) {
+                          alert('subdomain 이름 중복입니다');
+                        } else {
+                          addSubdomain(
+                            addCategory,
+                            1,
+                            categories,
+                            key,
+                            (e.target as HTMLInputElement).value,
+                            setSubdomainInputs,
+                            subdomainInputs,
+                          );
+                        }
                       }
                     }}
                   />
                   <Button
                     onClick={() => {
-                      addSubdomain(
-                        addCategory,
-                        1,
-                        categories,
-                        key,
-                        newSubdomain,
-                        setSubdomainInputs,
-                        subdomainInputs,
-                      );
+                      if (newSubdomain.length === 0) {
+                        alert('subdomain은 1글자 이상이어야 합니다');
+                      } else if (subDomains[key].indexOf(newSubdomain) !== -1) {
+                        alert('subdomain 이름 중복입니다');
+                      } else {
+                        addSubdomain(
+                          addCategory,
+                          1,
+                          categories,
+                          key,
+                          newSubdomain,
+                          setSubdomainInputs,
+                          subdomainInputs,
+                        );
+                      }
                     }}
                   >
                     저장
@@ -223,7 +251,13 @@ function Sidebar() {
           >
             <Button
               onClick={() => {
-                addDomain(setCategoryAdded, addCategory, 1, newDomain);
+                if (newDomain.length === 0) {
+                  alert('카테고리 이름은 1글자 이상이어야 합니다');
+                } else if (domains.indexOf(newDomain) === -1) {
+                  addDomain(setCategoryAdded, addCategory, 1, newDomain);
+                } else {
+                  alert('카테고리 이름 중복입니다');
+                }
               }}
             >
               추가
