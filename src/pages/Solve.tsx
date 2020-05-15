@@ -1,5 +1,5 @@
 /** @jsx jsx */
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { css, jsx } from '@emotion/core';
 import { Layout, Breadcrumb, Button, Row, Col, Rate } from 'antd';
@@ -48,16 +48,16 @@ const footerCss = css`
   background-color: #6c6564;
 `;
 
-type QuestionProps = {
+type SolveProps = {
   match: any;
   location: any;
 };
 
-function Question({ match, location }: QuestionProps) {
-  // const [rating, setRating] = useState<number>(3);
+function Solve({ match, location }: SolveProps) {
+  const [rating, setRating] = useState<number>(3);
   const [visible, setVisible] = useState<boolean>(false);
 
-  const { data, error } = useQuery(GET_QUESTIONS, {
+  const { data: dataQuestions, error } = useQuery(GET_QUESTIONS, {
     variables: { id: 1 },
   });
 
@@ -71,12 +71,14 @@ function Question({ match, location }: QuestionProps) {
 
   if (error) console.log(error);
 
-  let task;
-  if (location.pathname.split('/')[1] === 'solve') {
-    task = '문제 풀기';
-  } else {
-    task = '문제 등록';
-  }
+  // let task;
+  // if (location.pathname.split('/')[1] === 'solve') {
+  //   task = '문제 풀기';
+  // } else {
+  //   task = '문제 등록';
+  // }문제 풀기
+  const task = '문제 풀기';
+  // 여기 나중에 수정
 
   let answerVisible;
   let answerButton;
@@ -91,15 +93,27 @@ function Question({ match, location }: QuestionProps) {
   const desc = ['terrible', 'bad', 'normal', 'good', 'wonderful'];
 
   let qList;
-  if (data) {
-    qList = data.getQuestions.filter(
+  let importanceNumber;
+  if (dataQuestions && dataQuestions.getQuestions.length > 0) {
+    qList = dataQuestions.getQuestions.filter(
       (elm) =>
         elm.category.domain === match.params.domain &&
         elm.category.subdomain === match.params.subdomain,
     );
+
+    if (qList.length > 0) {
+      importanceNumber =
+        importanceObj[qList[Number(match.params.qNumber) - 1].importance];
+    } else {
+      importanceNumber = 0;
+    }
   } else {
     qList = [];
   }
+
+  useEffect(() => {
+    setRating(importanceNumber);
+  }, [importanceNumber]);
 
   if (qList.length === 0) return null;
 
@@ -159,14 +173,7 @@ function Question({ match, location }: QuestionProps) {
               <Rate
                 tooltips={desc}
                 // onChange={setRating}
-                value={
-                  importanceObj[
-                    qList.filter(
-                      (_, key) =>
-                        Number(key + 1) === Number(match.params.qNumber),
-                    )[0].importance
-                  ]
-                }
+                value={rating}
               />
             </span>
           </Col>
@@ -201,4 +208,4 @@ function Question({ match, location }: QuestionProps) {
   );
 }
 
-export default Question;
+export default Solve;

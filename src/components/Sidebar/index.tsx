@@ -65,8 +65,6 @@ function Sidebar() {
   }
 
   if (categories && categories.length > 0) {
-    // console.log('categories', categories);
-    console.log('newDomain', newDomain);
     return (
       <Sider width={400} className="site-layout-background">
         {/* domain 추가 버튼 */}
@@ -164,8 +162,12 @@ function Sidebar() {
                           <Link to={`/solve/${Object.keys(elm)[0]}/${ele}/1`}>
                             {ele}
                           </Link>
-                          <Button onClick={() => console.log('문제추가')}>
-                            +
+                          <Button>
+                            <Link
+                              to={`/register/${Object.keys(elm)[0]}/${ele}`}
+                            >
+                              +
+                            </Link>
                           </Button>
                         </li>
                       );

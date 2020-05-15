@@ -7,9 +7,10 @@ import Header from './components/Header';
 import './css/App.css';
 import Sidebar from './components/Sidebar';
 import Home from './pages/Home';
-import Question from './pages/Question';
+import Solve from './pages/Solve';
 import NotFound from './pages/NotFound';
 import client from './graphql/apollo';
+import Register from './pages/Register';
 
 const wrapper = css`
   height: 100vh;
@@ -30,9 +31,10 @@ function App() {
             <Sidebar />
             <Switch>
               <Route exact path="/" component={Home} />
+              <Route path="/register/:domain/:subdomain" component={Register} />
               <Route
                 path="/solve/:domain/:subdomain/:qNumber"
-                component={Question}
+                component={Solve}
               />
               <Route component={NotFound} />
             </Switch>
