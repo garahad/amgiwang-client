@@ -18,7 +18,7 @@ function Header() {
       <Menu
         theme="dark"
         mode="horizontal"
-        defaultSelectedKeys={['2']}
+        defaultSelectedKeys={[]}
         style={{ lineHeight: '64px' }}
       >
         <Menu.Item key="1">문제 등록</Menu.Item>
