@@ -4,7 +4,11 @@ import { UserOutlined } from '@ant-design/icons';
 import { Layout, Button } from 'antd';
 import { useQuery, useMutation } from '@apollo/react-hooks';
 
-import { GET_CATEGORIES, ADD_CATEGORY } from '../../graphql/queries';
+import {
+  GET_CATEGORIES,
+  ADD_CATEGORY,
+  GET_QUESTIONS,
+} from '../../graphql/queries';
 import addDomain from './addDomain';
 import addSubdomain from './addSubdomain';
 
@@ -27,6 +31,10 @@ function Sidebar() {
   const { data: dataCategories } = useQuery(GET_CATEGORIES, {
     variables: { id: 1 },
   });
+  const { data: dataQuestions } = useQuery(GET_QUESTIONS, {
+    variables: { id: 1 },
+  });
+
   const [addCategory] = useMutation(ADD_CATEGORY, {
     refetchQueries: [{ query: GET_CATEGORIES, variables: { id: 1 } }],
     onCompleted: () => {
@@ -63,6 +71,11 @@ function Sidebar() {
       // ts 이해 부족
     });
   }
+
+  console.log('categories', dataCategories && dataCategories.getCategories);
+  console.log('dataQuestions', dataQuestions && dataQuestions.getQuestions);
+
+  // 중복 없는 이런 긴 버튼들도 따로 파일로 빼주나? 코드가 넘 길어지니?
 
   if (categories && categories.length > 0) {
     return (
@@ -155,12 +168,21 @@ function Sidebar() {
               </Button>
               {domainVisible[key]
                 ? Object.values<any>(elm)[0]!.map((ele) => {
+                    console.log('elm', elm);
                     if (ele.length > 0) {
                       return (
                         // ts 이해 부족
                         <li key={ele} style={{ marginLeft: '30px' }}>
                           <Link to={`/solve/${Object.keys(elm)[0]}/${ele}/1`}>
                             {ele}
+                            {`(                              ${
+                              dataQuestions.getQuestions.filter(
+                                ({ category }) =>
+                                  category.domain === Object.keys(elm)[0] &&
+                                  category.subdomain === ele,
+                              ).length
+                            }
+                            )`}
                           </Link>
                           <Button>
                             <Link

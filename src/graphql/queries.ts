@@ -13,6 +13,7 @@ export const GET_USERINFO = gql`
 export const GET_CATEGORIES = gql`
   query GetCategories($id: Int!) {
     getCategories(id: $id) {
+      id
       user {
         id
         nick
@@ -31,6 +32,7 @@ export const GET_QUESTIONS = gql`
         nick
       }
       category {
+        id
         domain
         subdomain
       }
