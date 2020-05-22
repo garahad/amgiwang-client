@@ -1,7 +1,16 @@
 /** @jsx jsx */
 import { useState, useEffect, useRef } from 'react';
 import { css, jsx } from '@emotion/core';
-import { Layout, Breadcrumb, Button, Row, Col, Rate, Input } from 'antd';
+import {
+  Layout,
+  Breadcrumb,
+  Button,
+  Row,
+  Col,
+  Rate,
+  Input,
+  Tooltip,
+} from 'antd';
 import { useQuery, useMutation } from '@apollo/react-hooks';
 import {
   ADD_QUESTION,
@@ -70,13 +79,14 @@ function Register({ match }: RegisterProps) {
   const [newQ, setNewQ] = useState<string>('');
   const [newAnswer, setNewAnswer] = useState<string>('');
   const [rating, setRating] = useState<number>(0);
+  const [toggleSubmit, setToggleSubmit] = useState<boolean>(true);
   const inputEl = useRef() as any;
 
   useEffect(() => {
     if (inputEl && inputEl.current) {
       inputEl.current!.focus();
     }
-  }, [inputEl]);
+  }, [inputEl, match.params.subdomain, toggleSubmit]);
 
   const importanceObj = {
     1: 'ONE',
@@ -157,27 +167,34 @@ function Register({ match }: RegisterProps) {
           <Col className="gutter-row" span={12}>
             <Row>
               <Col span={16}>
-                <Button>취소</Button> &nbsp;
-                <Button
-                  disabled={!rating}
-                  onClick={() => {
-                    // category 번호를 local state로 sidebar와 공유하거나 match.params에서 추정
-                    addQuestion({
-                      variables: {
-                        owner: 1,
-                        category: nowCategory + 1,
-                        importance: importanceObj[rating],
-                        questionContent: newQ,
-                        answer: newAnswer,
-                      },
-                    });
-                    setNewQ('');
-                    setNewAnswer('');
-                    console.log('클릭된건가?');
-                  }}
+                {/* <Button>취소</Button> &nbsp; */}
+                <Tooltip
+                  title="문제, 답, 중요도를 모두 기록해주세요"
+                  visible={!rating || !newAnswer || !newQ}
                 >
-                  저장
-                </Button>
+                  <Button
+                    disabled={!rating}
+                    onClick={() => {
+                      // category 번호를 local state로 sidebar와 공유하거나 match.params에서 추정
+                      addQuestion({
+                        variables: {
+                          owner: 1,
+                          category: nowCategory + 1,
+                          importance: importanceObj[rating],
+                          questionContent: newQ,
+                          answer: newAnswer,
+                        },
+                      });
+                      setNewQ('');
+                      setNewAnswer('');
+                      setRating(0);
+                      setToggleSubmit(!toggleSubmit);
+                      alert('저장완료');
+                    }}
+                  >
+                    저장
+                  </Button>
+                </Tooltip>
                 &nbsp;
               </Col>
               {/* <Col span={8}>
