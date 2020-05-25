@@ -50,10 +50,10 @@ const footerCss = css`
 
 type SolveProps = {
   match: any;
-  location: any;
+  history: any;
 };
 
-function Solve({ match, location }: SolveProps) {
+function Solve({ match, history }: SolveProps) {
   const [rating, setRating] = useState<number>(3);
   const [visible, setVisible] = useState<boolean>(false);
 
@@ -135,7 +135,32 @@ function Solve({ match, location }: SolveProps) {
         }}
       >
         <Row gutter={{ xs: 12, md: 24 }}>
-          <Col className="gutter-row" span={12}>
+          <Col className="gutter-row" span={2}>
+            {qList.map((elm, key) => {
+              console.log('match.params.qNumber', typeof match.params.qNumber);
+              return (
+                <div key={key}>
+                  <Button
+                    onClick={() => {
+                      history.push(
+                        `/solve/${match.params.domain}/${
+                          match.params.subdomain
+                        }/${key + 1}`,
+                      );
+                    }}
+                    type={
+                      Number(match.params.qNumber) === key + 1
+                        ? 'primary'
+                        : 'default'
+                    }
+                  >
+                    {key + 1}
+                  </Button>
+                </div>
+              );
+            })}
+          </Col>
+          <Col className="gutter-row" span={11}>
             <div css={questionTitle}>문제</div>
             <div css={questionInput}>
               {
@@ -145,7 +170,7 @@ function Solve({ match, location }: SolveProps) {
               }
             </div>
           </Col>
-          <Col className="gutter-row" span={12}>
+          <Col className="gutter-row" span={11}>
             <div css={answerTitle}>답</div>
             <div css={answerInput}>
               <span
