@@ -48,12 +48,12 @@ const footerCss = css`
   background-color: #6c6564;
 `;
 
-type SolveProps = {
+type SolveImportanceProps = {
   match: any;
   history: any;
 };
 
-function Solve({ match, history }: SolveProps) {
+function SolveImportance({ match, history }: SolveImportanceProps) {
   const [rating, setRating] = useState<number>(3);
   const [visible, setVisible] = useState<boolean>(false);
 
@@ -71,14 +71,7 @@ function Solve({ match, history }: SolveProps) {
 
   if (error) console.log(error);
 
-  // let task;
-  // if (location.pathname.split('/')[1] === 'solve') {
-  //   task = '문제 풀기';
-  // } else {
-  //   task = '문제 등록';
-  // }문제 풀기
   const task = '문제 풀기';
-  // 여기 나중에 수정
 
   let answerVisible;
   let answerButton;
@@ -93,37 +86,35 @@ function Solve({ match, history }: SolveProps) {
   const desc = ['terrible', 'bad', 'normal', 'good', 'wonderful'];
 
   let qList;
-  let importanceNumber;
   if (dataQuestions && dataQuestions.getQuestions.length > 0) {
     qList = dataQuestions.getQuestions.filter(
       (elm) =>
-        elm.category.domain === match.params.domain &&
-        elm.category.subdomain === match.params.subdomain,
+        importanceObj[elm.importance] === Number(match.params.importance),
     );
-
-    if (qList.length > 0) {
-      importanceNumber =
-        importanceObj[qList[Number(match.params.qNumber) - 1].importance];
-    } else {
-      importanceNumber = 0;
-    }
   } else {
     qList = [];
   }
 
   useEffect(() => {
-    setRating(importanceNumber);
-  }, [importanceNumber]);
+    setRating(Number(match.params.importance));
+  }, [match.params.importance]);
 
   if (qList.length === 0) return null;
+
+  console.log('qList', qList);
 
   return (
     <Layout css={wrapper}>
       <Breadcrumb css={breadcrumbCss}>
         <Breadcrumb.Item>{task}</Breadcrumb.Item>
-        <Breadcrumb.Item>{match.params.domain}</Breadcrumb.Item>
-        <Breadcrumb.Item>{match.params.subdomain}</Breadcrumb.Item>
-        <Breadcrumb.Item>{match.params.qNumber}번 문제</Breadcrumb.Item>
+        <Breadcrumb.Item>중요도 {match.params.importance}</Breadcrumb.Item>
+        {/* <Breadcrumb.Item>{match.params.importance}</Breadcrumb.Item> */}
+        <Breadcrumb.Item>
+          {match.params.qNumber}번 문제{' '}
+          {`(${qList[match.params.qNumber].category.domain} / ${
+            qList[match.params.qNumber].category.subdomain
+          })`}
+        </Breadcrumb.Item>
       </Breadcrumb>
       <Layout.Content
         className="site-layout-background"
@@ -135,32 +126,31 @@ function Solve({ match, history }: SolveProps) {
         }}
       >
         <Row gutter={{ xs: 12, md: 24 }}>
-          <Col className="gutter-row" span={2}>
-            {qList.map((elm, key) => {
-              console.log('match.params.qNumber', typeof match.params.qNumber);
-              return (
-                <div key={key}>
-                  <Button
-                    onClick={() => {
-                      history.push(
-                        `/solve/${match.params.domain}/${
-                          match.params.subdomain
-                        }/${key + 1}`,
-                      );
-                    }}
-                    type={
-                      Number(match.params.qNumber) === key + 1
-                        ? 'primary'
-                        : 'default'
-                    }
-                  >
-                    {key + 1}
-                  </Button>
-                </div>
-              );
-            })}
+          <Col className="gutter-row" span={4}>
+            <div style={{ height: '50vh', overflow: 'scroll' }}>
+              {qList.map((_, key) => {
+                return (
+                  <div key={key}>
+                    <Button
+                      onClick={() => {
+                        history.push(
+                          `/solve/중요도${match.params.importance}/${key + 1}`,
+                        );
+                      }}
+                      type={
+                        Number(match.params.qNumber) === key + 1
+                          ? 'primary'
+                          : 'default'
+                      }
+                    >
+                      {key + 1}
+                    </Button>
+                  </div>
+                );
+              })}
+            </div>
           </Col>
-          <Col className="gutter-row" span={11}>
+          <Col className="gutter-row" span={10}>
             <div css={questionTitle}>문제</div>
             <div css={questionInput}>
               {
@@ -170,7 +160,7 @@ function Solve({ match, history }: SolveProps) {
               }
             </div>
           </Col>
-          <Col className="gutter-row" span={11}>
+          <Col className="gutter-row" span={10}>
             <div css={answerTitle}>답</div>
             <div css={answerInput}>
               <span
@@ -233,4 +223,4 @@ function Solve({ match, history }: SolveProps) {
   );
 }
 
-export default Solve;
+export default SolveImportance;
