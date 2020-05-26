@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Layout, Button } from 'antd';
 import { useQuery, useMutation } from '@apollo/react-hooks';
+import { Link } from 'react-router-dom';
 import {
   GET_CATEGORIES,
   ADD_CATEGORY,
@@ -143,6 +144,35 @@ function Sidebar() {
             <DomainSaveBtn {...props} />
             <Button onClick={() => setCategoryAdded(null)}>취소</Button>
           </span>
+        </ul>
+        <hr />
+        <ul>
+          중요도
+          <li>
+            <Button>
+              <Link to="/solve/중요도5/1">별5개</Link>
+            </Button>
+          </li>
+          <li>
+            <Button>
+              <Link to="/solve/중요도4/1">별4개</Link>
+            </Button>
+          </li>
+          <li>
+            <Button>
+              <Link to="/solve/중요도3/1">별3개</Link>
+            </Button>
+          </li>
+          <li>
+            <Button>
+              <Link to="/solve/중요도2/1">별2개</Link>
+            </Button>
+          </li>
+          <li>
+            <Button>
+              <Link to="/solve/중요도1/1">별1개</Link>
+            </Button>
+          </li>
         </ul>
       </Sider>
     );

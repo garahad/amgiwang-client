@@ -7,7 +7,8 @@ import Header from './components/Header';
 import './css/App.css';
 import Sidebar from './components/Sidebar';
 import Home from './pages/Home';
-import Solve from './pages/Solve';
+import SolveCategory from './pages/SolveCategory';
+import SolveImportance from './pages/SolveImportance';
 import NotFound from './pages/NotFound';
 import client from './graphql/apollo';
 import Register from './pages/Register';
@@ -34,7 +35,11 @@ function App() {
               <Route path="/register/:domain/:subdomain" component={Register} />
               <Route
                 path="/solve/:domain/:subdomain/:qNumber"
-                component={Solve}
+                component={SolveCategory}
+              />
+              <Route
+                path="/solve/중요도:importance/:qNumber"
+                component={SolveImportance}
               />
               <Route component={NotFound} />
             </Switch>

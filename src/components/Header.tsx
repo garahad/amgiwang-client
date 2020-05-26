@@ -22,8 +22,9 @@ function Header() {
         style={{ lineHeight: '64px' }}
       >
         {/* <Menu.Item key="1">문제 등록</Menu.Item> */}
-        {/* <Menu.Item key="2">문제 풀기</Menu.Item> */}
-        <Menu.Item key="3">문제 검색</Menu.Item>
+        <Menu.Item key="2">카테고리별 문제 풀기</Menu.Item>
+        <Menu.Item key="3">중요도별 문제 풀기</Menu.Item>
+        <Menu.Item key="4">문제 검색</Menu.Item>
       </Menu>
     </Layout.Header>
   );
