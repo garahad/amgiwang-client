@@ -6,6 +6,7 @@ import {
   GET_CATEGORIES,
   ADD_CATEGORY,
   GET_QUESTIONS,
+  WHAT_SIDEBAR,
 } from '../../graphql/queries';
 import addDomain from './addDomain';
 import addSubdomain from './addSubdomain';
@@ -40,6 +41,7 @@ function Sidebar() {
   const { data: dataQuestions } = useQuery(GET_QUESTIONS, {
     variables: { id: 1 },
   });
+  const { data: dataWhatSidebar } = useQuery(WHAT_SIDEBAR);
 
   const [addCategory] = useMutation(ADD_CATEGORY, {
     refetchQueries: [{ query: GET_CATEGORIES, variables: { id: 1 } }],
@@ -99,81 +101,86 @@ function Sidebar() {
 
     return (
       <Sider width={400} className="site-layout-background">
-        <DomainAddBtn {...props} />
-
-        <ul>
-          {categories.map((elm, key) => {
-            const newProps = { ...props, idx: key };
-            return (
-              <ul key={Object.keys(elm)[0] as any}>
-                <DomainToggleBtn
-                  {...{
-                    ...newProps,
-                    elm,
-                  }}
-                />
-                <SubdomainAddBtn {...newProps} />
-                {domainVisible[key]
-                  ? Object.values<any>(elm)[0]!.map((ele) => {
-                      if (ele.length > 0) {
-                        return (
-                          // ts 이해 부족
-                          <SubdomainList
-                            {...{ ele, elm, dataQuestions }}
-                            key={ele}
-                          />
-                        );
-                      }
-                      return null;
-                    })
-                  : null}
-                {domainVisible[key] && subdomainInputs[key] ? (
-                  <span>
-                    <SubdomainAddInput {...newProps} />
-                    <SubdomainSaveBtn {...newProps} />
-                    <SubdomainCancelBtn {...newProps} />
-                  </span>
-                ) : null}
-              </ul>
-            );
-          })}
-          {categoryAdded}
-          <span
-            style={categoryAdded ? { display: 'inline' } : { display: 'none' }}
-          >
-            <DomainSaveBtn {...props} />
-            <Button onClick={() => setCategoryAdded(null)}>취소</Button>
-          </span>
-        </ul>
-        <hr />
-        <ul>
-          중요도
-          <li>
-            <Button>
-              <Link to="/solve/중요도5/1">별5개</Link>
-            </Button>
-          </li>
-          <li>
-            <Button>
-              <Link to="/solve/중요도4/1">별4개</Link>
-            </Button>
-          </li>
-          <li>
-            <Button>
-              <Link to="/solve/중요도3/1">별3개</Link>
-            </Button>
-          </li>
-          <li>
-            <Button>
-              <Link to="/solve/중요도2/1">별2개</Link>
-            </Button>
-          </li>
-          <li>
-            <Button>
-              <Link to="/solve/중요도1/1">별1개</Link>
-            </Button>
-          </li>
-        </ul>
+        {dataWhatSidebar && dataWhatSidebar.whatSidebar === 'category' ? (
+          <>
+            <DomainAddBtn {...props} />
+            <ul>
+              {categories.map((elm, key) => {
+                const newProps = { ...props, idx: key };
+                return (
+                  <ul key={Object.keys(elm)[0] as any}>
+                    <DomainToggleBtn
+                      {...{
+                        ...newProps,
+                        elm,
+                      }}
+                    />
+                    <SubdomainAddBtn {...newProps} />
+                    {domainVisible[key]
+                      ? Object.values<any>(elm)[0]!.map((ele) => {
+                          if (ele.length > 0) {
+                            return (
+                              // ts 이해 부족
+                              <SubdomainList
+                                {...{ ele, elm, dataQuestions }}
+                                key={ele}
+                              />
+                            );
+                          }
+                          return null;
+                        })
+                      : null}
+                    {domainVisible[key] && subdomainInputs[key] ? (
+                      <span>
+                        <SubdomainAddInput {...newProps} />
+                        <SubdomainSaveBtn {...newProps} />
+                        <SubdomainCancelBtn {...newProps} />
+                      </span>
+                    ) : null}
+                  </ul>
+                );
+              })}
+              {categoryAdded}
+              <span
+                style={
+                  categoryAdded ? { display: 'inline' } : { display: 'none' }
+                }
+              >
+                <DomainSaveBtn {...props} />
+                <Button onClick={() => setCategoryAdded(null)}>취소</Button>
+              </span>
+            </ul>
+          </>
+        ) : (
+          <ul>
+            중요도
+            <li>
+              <Button>
+                <Link to="/solve/중요도5/1">별5개</Link>
+              </Button>
+            </li>
+            <li>
+              <Button>
+                <Link to="/solve/중요도4/1">별4개</Link>
+              </Button>
+            </li>
+            <li>
+              <Button>
+                <Link to="/solve/중요도3/1">별3개</Link>
+              </Button>
+            </li>
+            <li>
+              <Button>
+                <Link to="/solve/중요도2/1">별2개</Link>
+              </Button>
+            </li>
+            <li>
+              <Button>
+                <Link to="/solve/중요도1/1">별1개</Link>
+              </Button>
+            </li>
+          </ul>
+        )}
       </Sider>
     );
   }
