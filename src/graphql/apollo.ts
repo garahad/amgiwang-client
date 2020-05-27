@@ -3,6 +3,8 @@ import { InMemoryCache } from 'apollo-cache-inmemory';
 import { HttpLink } from 'apollo-link-http';
 import { onError } from 'apollo-link-error';
 import { ApolloLink } from 'apollo-link';
+import { typeDefs } from './typeDefs';
+import { resolvers } from './resolvers';
 
 const errorLink = onError(({ graphQLErrors, networkError }) => {
   if (graphQLErrors)
@@ -24,7 +26,15 @@ const link = ApolloLink.from([errorLink, httpLink]);
 const client = new ApolloClient({
   cache,
   link,
+  typeDefs,
+  resolvers,
   connectToDevTools: true,
+});
+
+cache.writeData({
+  data: {
+    whatSidebar: 'category',
+  },
 });
 
 export default client;

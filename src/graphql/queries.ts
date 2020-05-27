@@ -66,3 +66,17 @@ export const ADD_QUESTION = gql`
     )
   }
 `;
+
+// local query =============================
+
+export const WHAT_SIDEBAR = gql`
+  query WhatSidebar {
+    whatSidebar @client
+  }
+`;
+
+export const SET_SIDEBAR = gql`
+  mutation SetSidebar($status: String!) {
+    setSidebar(status: $status) @client
+  }
+`;
