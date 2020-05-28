@@ -1,48 +1,20 @@
 /** @jsx jsx */
 import { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
 import { css, jsx } from '@emotion/core';
-import { Layout, Breadcrumb, Button, Row, Col, Rate } from 'antd';
+import { Layout, Breadcrumb, Row, Col } from 'antd';
 import { useQuery } from '@apollo/react-hooks';
 import { GET_QUESTIONS } from '../graphql/queries';
+import IndexBtns from '../components/SolvePage/IndexBtns';
+import QSheet from '../components/SolvePage/QSheet';
+import AnswerSheet from '../components/SolvePage/AnswerSheet';
+import BottomBtns from '../components/SolvePage/BottomBtns';
 
 const wrapper = css`
   padding: 0 24px 24px;
 `;
-
 const breadcrumbCss = css`
   margin: 16px 0;
 `;
-
-// const contentLayout = css`
-//   padding: 24px,
-//   margin: 0,
-//   min-height: 280,
-//   background: #fff;
-// `;
-
-const questionTitle = css`
-  background-color: #95bff2;
-  padding: 8px 8px;
-`;
-
-const questionInput = css`
-  background-color: #f2eee6;
-  padding: 8px 8px;
-  height: 50vh;
-`;
-
-const answerTitle = css`
-  background-color: #f2a690;
-  padding: 8px 8px;
-`;
-
-const answerInput = css`
-  background-color: #f2decf;
-  padding: 8px 8px;
-  height: 50vh;
-`;
-
 const footerCss = css`
   text-align: center;
   background-color: #6c6564;
@@ -56,7 +28,6 @@ type SolveImportanceProps = {
 function SolveImportance({ match, history }: SolveImportanceProps) {
   const [rating, setRating] = useState<number>(3);
   const [visible, setVisible] = useState<boolean>(false);
-
   const { data: dataQuestions, error } = useQuery(GET_QUESTIONS, {
     variables: { id: 1 },
   });
@@ -73,17 +44,14 @@ function SolveImportance({ match, history }: SolveImportanceProps) {
 
   const task = '문제 풀기';
 
+  // solveCategory와 solveImportance의 중복인 부분 깔끔하게 제거하는 방법 있을까?
+
   let answerVisible;
-  let answerButton;
   if (!visible) {
     answerVisible = 'none';
-    answerButton = '정답 확인';
   } else {
     answerVisible = '';
-    answerButton = '정답 가리기';
   }
-
-  const desc = ['terrible', 'bad', 'normal', 'good', 'wonderful'];
 
   let qList;
   if (dataQuestions && dataQuestions.getQuestions.length > 0) {
@@ -101,8 +69,6 @@ function SolveImportance({ match, history }: SolveImportanceProps) {
 
   if (qList.length === 0) return null;
 
-  console.log('qList', qList);
-
   return (
     <Layout css={wrapper}>
       <Breadcrumb css={breadcrumbCss}>
@@ -118,7 +84,6 @@ function SolveImportance({ match, history }: SolveImportanceProps) {
       </Breadcrumb>
       <Layout.Content
         className="site-layout-background"
-        // css={contentLayout} 안 되네...
         style={{
           padding: 24,
           margin: 0,
@@ -127,97 +92,20 @@ function SolveImportance({ match, history }: SolveImportanceProps) {
       >
         <Row gutter={{ xs: 12, md: 24 }}>
           <Col className="gutter-row" span={4}>
-            <div style={{ height: '50vh', overflow: 'scroll' }}>
-              {qList.map((_, key) => {
-                return (
-                  <div key={key}>
-                    <Button
-                      onClick={() => {
-                        history.push(
-                          `/solve/중요도${match.params.importance}/${key + 1}`,
-                        );
-                      }}
-                      type={
-                        Number(match.params.qNumber) === key + 1
-                          ? 'primary'
-                          : 'default'
-                      }
-                    >
-                      {key + 1}
-                    </Button>
-                  </div>
-                );
-              })}
-            </div>
+            <IndexBtns {...{ qList, match, history }} />
           </Col>
           <Col className="gutter-row" span={10}>
-            <div css={questionTitle}>문제</div>
-            <div css={questionInput}>
-              {
-                qList.filter(
-                  (_, key) => Number(key + 1) === Number(match.params.qNumber),
-                )[0]!.questionContent
-              }
-            </div>
+            <QSheet {...{ qList, match }} />
           </Col>
           <Col className="gutter-row" span={10}>
-            <div css={answerTitle}>답</div>
-            <div css={answerInput}>
-              <span
-                style={{
-                  display: answerVisible,
-                }}
-              >
-                {
-                  qList.filter(
-                    (_, key) =>
-                      Number(key + 1) === Number(match.params.qNumber),
-                  )[0].answer
-                }
-              </span>
-            </div>
+            <AnswerSheet {...{ answerVisible, qList, match }} />
           </Col>
         </Row>
       </Layout.Content>
       <Layout.Footer css={footerCss}>
-        <Row gutter={{ xs: 12, md: 24 }}>
-          <Col className="gutter-row" span={12}>
-            <span>중요도</span>
-            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-            <span>
-              <Rate
-                tooltips={desc}
-                // onChange={setRating}
-                value={rating}
-              />
-            </span>
-          </Col>
-          <Col className="gutter-row" span={12}>
-            <Row>
-              <Col span={16}>
-                <Button
-                  onClick={() => setVisible(false)}
-                  disabled={Number(match.params.qNumber) <= 1}
-                >
-                  <Link to={`${Number(match.params.qNumber) - 1}`}>이전</Link>
-                </Button>
-                &nbsp;
-                <Button
-                  onClick={() => setVisible(false)}
-                  disabled={Number(match.params.qNumber) === qList.length}
-                >
-                  <Link to={`${Number(match.params.qNumber) + 1}`}>다음</Link>
-                </Button>
-                &nbsp;
-              </Col>
-              <Col span={8}>
-                <Button onClick={() => setVisible(!visible)}>
-                  {answerButton}
-                </Button>
-              </Col>
-            </Row>
-          </Col>
-        </Row>
+        <BottomBtns
+          {...{ match, history, qList, rating, visible, setVisible }}
+        />
       </Layout.Footer>
     </Layout>
   );
