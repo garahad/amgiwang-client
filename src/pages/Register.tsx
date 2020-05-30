@@ -1,16 +1,8 @@
 /** @jsx jsx */
 import { useState, useEffect, useRef } from 'react';
 import { css, jsx } from '@emotion/core';
-import {
-  Layout,
-  Breadcrumb,
-  Button,
-  Row,
-  Col,
-  Rate,
-  Input,
-  Tooltip,
-} from 'antd';
+import { Layout, Breadcrumb, Button, Row, Col, Rate, Tooltip } from 'antd';
+import TextareaAutosize from '@material-ui/core/TextareaAutosize';
 import { useQuery, useMutation } from '@apollo/react-hooks';
 import {
   ADD_QUESTION,
@@ -18,14 +10,15 @@ import {
   GET_QUESTIONS,
 } from '../graphql/queries';
 
-const { TextArea } = Input;
-
 const wrapper = css`
   padding: 0 24px 24px;
 `;
 
 const breadcrumbCss = css`
   margin: 16px 0;
+`;
+const textareaCss = css`
+  width: 100%;
 `;
 
 // const contentLayout = css`
@@ -133,8 +126,9 @@ function Register({ match }: RegisterProps) {
           <Col className="gutter-row" span={12}>
             <div css={questionTitle}>문제</div>
             <div css={questionInput}>
-              <TextArea
-                autoSize={{ minRows: 4, maxRows: 20 }}
+              <TextareaAutosize
+                rowsMin={4}
+                css={textareaCss}
                 placeholder="여기에 문제를 쓰세요"
                 ref={inputEl}
                 onChange={(e) => setNewQ(e.target.value)}
@@ -145,8 +139,9 @@ function Register({ match }: RegisterProps) {
           <Col className="gutter-row" span={12}>
             <div css={answerTitle}>답</div>
             <div css={answerInput}>
-              <TextArea
-                autoSize={{ minRows: 4, maxRows: 20 }}
+              <TextareaAutosize
+                rowsMin={4}
+                css={textareaCss}
                 placeholder="여기에 답을 쓰세요"
                 onChange={(e) => setNewAnswer(e.target.value)}
                 value={newAnswer}

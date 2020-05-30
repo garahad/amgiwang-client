@@ -5,15 +5,17 @@ type IndexBtnsProps = {
   qList: any;
   match: any;
   history: any;
+  editing: boolean;
 };
 
-const IndexBtns = ({ qList, match, history }: IndexBtnsProps) => {
+const IndexBtns = ({ qList, match, history, editing }: IndexBtnsProps) => {
   return (
     <div style={{ height: '60vh', overflow: 'scroll' }}>
       {qList.map((_, key) => {
         return (
           <div key={key}>
             <Button
+              disabled={editing}
               onClick={() => {
                 if (match.params.domain) {
                   history.push(

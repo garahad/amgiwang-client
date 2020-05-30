@@ -1,5 +1,5 @@
 /** @jsx jsx */
-import { Link } from 'react-router-dom';
+import { withRouter, Link } from 'react-router-dom';
 import { Layout, Menu } from 'antd';
 import { css, jsx } from '@emotion/core';
 import { useMutation } from '@apollo/react-hooks';
@@ -11,7 +11,11 @@ const logoCss = css`
   color: white;
 `;
 
-function Header() {
+type HeaderProps = {
+  history: any;
+};
+
+function Header({ history }: HeaderProps) {
   const [setSidebar] = useMutation(SET_SIDEBAR);
   const [selected, setSelected] = useState<any[]>([]);
 
@@ -41,6 +45,7 @@ function Header() {
           onClick={() => {
             setSidebar({ variables: { status: 'category' } });
             setSelected(['2']);
+            history.push('/');
           }}
         >
           카테고리별 문제 풀기
@@ -50,6 +55,7 @@ function Header() {
           onClick={() => {
             setSidebar({ variables: { status: 'importance' } });
             setSelected(['3']);
+            history.push('/');
           }}
         >
           중요도별 문제 풀기
@@ -58,6 +64,7 @@ function Header() {
           key="4"
           onClick={() => {
             setSelected(['4']);
+            history.push('/');
           }}
         >
           문제 검색
@@ -67,4 +74,4 @@ function Header() {
   );
 }
 
-export default Header;
+export default withRouter(Header);
