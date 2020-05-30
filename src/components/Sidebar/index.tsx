@@ -100,7 +100,7 @@ function Sidebar() {
     };
 
     return (
-      <Sider width={200} className="site-layout-background">
+      <Sider width="30%" className="site-layout-background">
         {dataWhatSidebar && dataWhatSidebar.whatSidebar === 'category' ? (
           <>
             <DomainAddBtn {...props} />
