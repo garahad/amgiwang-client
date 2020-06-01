@@ -8,6 +8,8 @@ const useSolvePage = () => {
   const [editing, setEditing] = useState<boolean>(false);
   const [newQ, setNewQ] = useState<string>('');
   const [newAnswer, setNewAnswer] = useState<string>('');
+  const [nowDomain, setNowDomain] = useState<string>('');
+  const [nowSubDomain, setNowSubDomain] = useState<string>('');
 
   const { data: dataQuestions, error: errorQuestions } = useQuery(
     GET_QUESTIONS,
@@ -48,6 +50,10 @@ const useSolvePage = () => {
     visible,
     setRating,
     rating,
+    nowSubDomain,
+    setNowSubDomain,
+    nowDomain,
+    setNowDomain,
   };
 };
 

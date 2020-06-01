@@ -4,7 +4,7 @@ import { GET_CATEGORIES } from '../graphql/queries';
 const useCategoryArray = () => {
   let categories;
   let domains;
-  let subDomains;
+  let allSubDomains;
 
   const { data: dataCategories } = useQuery(GET_CATEGORIES, {
     variables: { id: 1 },
@@ -14,20 +14,20 @@ const useCategoryArray = () => {
     domains = Array.from(
       new Set(dataCategories.getCategories.map((elm) => elm.domain)),
     );
-    subDomains = domains.map((): any[] => []);
+    allSubDomains = domains.map((): any[] => []);
     dataCategories.getCategories.forEach((elm) => {
       const domainIdx = domains.indexOf(elm.domain);
-      subDomains[domainIdx].push(elm.subdomain);
+      allSubDomains[domainIdx].push(elm.subdomain);
     });
     categories = domains.map((elm, key) => {
-      return { [elm as any]: subDomains[key] };
+      return { [elm as any]: allSubDomains[key] };
       // ts 이해 부족
     });
   }
 
   return {
     domains,
-    subDomains,
+    allSubDomains,
     categories,
     dataCategories,
   };

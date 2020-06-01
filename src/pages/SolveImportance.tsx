@@ -1,5 +1,5 @@
 /** @jsx jsx */
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import { css, jsx } from '@emotion/core';
 import { Layout, Breadcrumb } from 'antd';
 import useSolvePage from '../hooks/useSolvePage';
@@ -7,6 +7,7 @@ import ContentLayout from '../components/SolvePage/ContentLayout';
 import BottomBtns from '../components/SolvePage/BottomBtns';
 import useCategoryArray from '../hooks/useCategoryArray';
 import BreadcrumbDropdown from '../components/SolvePage/BreadcrumbDropdown';
+import getSubdomains from '../utils/SolvePage/getSubdomains';
 
 const wrapper = css`
   padding: 0 24px 24px;
@@ -41,21 +42,15 @@ function SolveImportance({ match, history }: SolveImportanceProps) {
     visible,
     setRating,
     rating,
+    nowSubDomain,
+    setNowSubDomain,
+    nowDomain,
+    setNowDomain,
   } = useSolvePage();
-
-  const [nowDomain, setNowDomain] = useState<string>('');
-  const [nowSubDomain, setNowSubDomain] = useState<string>('');
 
   const { domains, categories, dataCategories } = useCategoryArray();
 
-  let subDomains;
-  if (categories) {
-    subDomains = categories
-      .filter((elm) => {
-        return Object.keys(elm)[0] === nowDomain;
-      })
-      .map((el) => Object.values<any>(el)[0]);
-  }
+  const subDomains = getSubdomains({ categories, nowDomain });
 
   if (errorQuestions) console.log(errorQuestions);
 
@@ -84,12 +79,9 @@ function SolveImportance({ match, history }: SolveImportanceProps) {
       setNowSubDomain(qList[match.params.qNumber - 1].category.subdomain);
     }
     // eslint-disable-next-line
-  }, [qList.length]);
+  }, [qList.length, match.params.qNumber]);
 
   if (qList.length === 0) return null;
-
-  console.log('nowDomain', nowDomain);
-  console.log('nowSubdomain', nowSubDomain);
 
   return (
     <Layout css={wrapper}>

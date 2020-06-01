@@ -48,7 +48,7 @@ function Sidebar() {
     },
   });
 
-  const { categories, domains, subDomains } = useCategoryArray();
+  const { categories, domains, allSubDomains } = useCategoryArray();
 
   useEffect(() => {
     if (categories && categories.length > 0 && domainVisible.length === 0) {
@@ -76,7 +76,7 @@ function Sidebar() {
       setDomainVisible,
       domainVisible,
       setNewSubdomain,
-      subDomains,
+      allSubDomains,
       addSubdomain,
       categories,
       newSubdomain,
