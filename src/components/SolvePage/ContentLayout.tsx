@@ -1,30 +1,17 @@
 /** @jsx jsx */
-import { css, jsx } from '@emotion/core';
+import { jsx } from '@emotion/core';
 import React from 'react';
 import { Layout, Row, Col } from 'antd';
 import IndexBtns from './IndexBtns';
 import QSheet from './QSheet';
 import AnswerSheet from './AnswerSheet';
-import BottomBtns from './BottomBtns';
-
-const footerCss = css`
-  text-align: center;
-  background-color: #6c6564;
-`;
 
 type ContentLayoutProps = {
   qList: any;
   match: any;
   history: any;
   editing: any;
-  setEditing: any;
-  newQ: any;
   setNewQ: any;
-  newAnswer: any;
-  importanceObj: any;
-  rating: any;
-  visible: any;
-  setVisible: any;
   setNewAnswer: any;
   answerVisible: any;
 };
@@ -34,14 +21,7 @@ const ContentLayout = ({
   match,
   history,
   editing,
-  setEditing,
-  newQ,
   setNewQ,
-  newAnswer,
-  importanceObj,
-  rating,
-  visible,
-  setVisible,
   setNewAnswer,
   answerVisible,
 }: ContentLayoutProps) => {
@@ -82,23 +62,6 @@ const ContentLayout = ({
           </Col>
         </Row>
       </Layout.Content>
-      <Layout.Footer css={footerCss}>
-        <BottomBtns
-          {...{
-            match,
-            history,
-            qList,
-            rating,
-            visible,
-            setVisible,
-            editing,
-            setEditing,
-            newQ,
-            newAnswer,
-            importanceObj,
-          }}
-        />
-      </Layout.Footer>
     </React.Fragment>
   );
 };

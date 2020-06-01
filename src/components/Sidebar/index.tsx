@@ -7,8 +7,8 @@ import {
   GET_QUESTIONS,
   WHAT_SIDEBAR,
 } from '../../graphql/queries';
-import addDomain from './addDomain';
-import addSubdomain from './addSubdomain';
+import addDomain from '../../utils/Sidebar/addDomain';
+import addSubdomain from '../../utils/Sidebar/addSubdomain';
 import DomainAddBtn from './DomainAddBtn';
 import DomainToggleBtn from './DomainToggleBtn';
 import SubdomainAddBtn from './SubdomainAddBtn';
@@ -18,16 +18,13 @@ import SubdomainSaveBtn from './SubdomainSaveBtn';
 import SubdomainCancelBtn from './SubdomainCancelBtn';
 import DomainSaveBtn from './DomainSaveBtn';
 import ImportanceCates from './ImportanceCates';
+import useCategoryArray from '../../hooks/useCategoryArray';
 
 const { Sider } = Layout;
 
 // hooks 빼기,
 
 function Sidebar() {
-  let categories;
-  let domains;
-  let subDomains;
-
   const [categoryAdded, setCategoryAdded] = useState<any>(null);
   const [domainVisible, setDomainVisible] = useState<boolean[]>([]);
   const [subdomainInputs, setSubdomainInputs] = useState<boolean[]>([]);
@@ -51,6 +48,8 @@ function Sidebar() {
     },
   });
 
+  const { categories, domains, subDomains } = useCategoryArray();
+
   useEffect(() => {
     if (categories && categories.length > 0 && domainVisible.length === 0) {
       setDomainVisible(Array(categories.length).fill(false));
@@ -63,21 +62,6 @@ function Sidebar() {
       inputEl.current!.focus();
     }
   }, [inputEl, categoryAdded, subdomainInputs]);
-
-  if (dataCategories && dataCategories.getCategories) {
-    domains = Array.from(
-      new Set(dataCategories.getCategories.map((elm) => elm.domain)),
-    );
-    subDomains = domains.map((): any[] => []);
-    dataCategories.getCategories.forEach((elm) => {
-      const domainIdx = domains.indexOf(elm.domain);
-      subDomains[domainIdx].push(elm.subdomain);
-    });
-    categories = domains.map((elm, key) => {
-      return { [elm as any]: subDomains[key] };
-      // ts 이해 부족
-    });
-  }
 
   if (categories && categories.length > 0) {
     const props = {
