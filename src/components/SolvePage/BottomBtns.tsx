@@ -16,6 +16,7 @@ type BottomBtnsProps = {
   history: any;
   qList: any;
   rating: any;
+  setRating: any;
   visible: any;
   setVisible: any;
   editing: any;
@@ -23,6 +24,9 @@ type BottomBtnsProps = {
   newQ: any;
   newAnswer: any;
   importanceObj: any;
+  nowDomain: any;
+  nowSubDomain: any;
+  dataCategories: any;
 };
 
 const BottomBtns = ({
@@ -30,6 +34,7 @@ const BottomBtns = ({
   history,
   qList,
   rating,
+  setRating,
   visible,
   setVisible,
   editing,
@@ -37,6 +42,9 @@ const BottomBtns = ({
   newQ,
   newAnswer,
   importanceObj,
+  dataCategories,
+  nowDomain,
+  nowSubDomain,
 }: BottomBtnsProps) => {
   const [deleteQuestion] = useMutation(DELETE_QUESTION, {
     refetchQueries: [
@@ -60,6 +68,15 @@ const BottomBtns = ({
     refetchQueries: [{ query: GET_QUESTIONS, variables: { id: 1 } }],
     onCompleted: () => {
       alert('저장되었습니다');
+      if (
+        match.params.qNumber >= qList.length &&
+        match.params.subdomain !== nowSubDomain
+      ) {
+        history.push(
+          `/solve/${match.params.domain}/${match.params.subdomain}/${match
+            .params.qNumber - 1}`,
+        );
+      }
     },
   });
 
@@ -68,9 +85,26 @@ const BottomBtns = ({
     answerButton = '정답 확인';
   }
 
-  const desc = ['terrible', 'bad', 'normal', 'good', 'wonderful'];
+  console.log(
+    'impor',
+    importanceObj[qList[Number(match.params.qNumber) - 1].importance],
+  );
 
-  // console.log('지금문제', qList[Number(match.params.qNumber) - 1]);
+  const desc = ['terrible', 'bad', 'normal', 'good', 'wonderful'];
+  const revImportanceObj = {
+    1: 'ONE',
+    2: 'TWO',
+    3: 'THREE',
+    4: 'FOUR',
+    5: 'FIVE',
+  };
+
+  let newCategory;
+  if (dataCategories && dataCategories.getCategories.length > 0) {
+    [newCategory] = dataCategories.getCategories.filter(
+      (elm) => elm.domain === nowDomain && elm.subdomain === nowSubDomain,
+    );
+  }
 
   return (
     <Row gutter={{ xs: 12, md: 24 }}>
@@ -80,8 +114,9 @@ const BottomBtns = ({
         <span>
           <Rate
             tooltips={desc}
-            // onChange={setRating}
+            onChange={setRating}
             value={rating}
+            disabled={!editing}
           />
         </span>
       </Col>
@@ -122,10 +157,10 @@ const BottomBtns = ({
                     variables: {
                       id: qList[Number(match.params.qNumber) - 1].id,
                       owner: qList[Number(match.params.qNumber) - 1].owner.id,
-                      category:
-                        qList[Number(match.params.qNumber) - 1].category.id,
+                      category: newCategory.id,
+                      // qList[Number(match.params.qNumber) - 1].category.id,
                       importance:
-                        importanceObj[rating] ||
+                        revImportanceObj[rating] ||
                         qList[Number(match.params.qNumber) - 1].importance,
                       questionContent:
                         newQ ||
@@ -149,6 +184,11 @@ const BottomBtns = ({
                   onClick={() => {
                     setEditing(false);
                     setVisible(false);
+                    setRating(
+                      importanceObj[
+                        qList[Number(match.params.qNumber) - 1].importance
+                      ],
+                    );
                   }}
                 >
                   취소

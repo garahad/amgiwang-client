@@ -9,9 +9,12 @@ const useSolvePage = () => {
   const [newQ, setNewQ] = useState<string>('');
   const [newAnswer, setNewAnswer] = useState<string>('');
 
-  const { data: dataQuestions, error } = useQuery(GET_QUESTIONS, {
-    variables: { id: 1 },
-  });
+  const { data: dataQuestions, error: errorQuestions } = useQuery(
+    GET_QUESTIONS,
+    {
+      variables: { id: 1 },
+    },
+  );
 
   const importanceObj = {
     ONE: 1,
@@ -33,7 +36,7 @@ const useSolvePage = () => {
     answerVisible,
     task,
     importanceObj,
-    error,
+    errorQuestions,
     dataQuestions,
     setNewAnswer,
     newAnswer,
