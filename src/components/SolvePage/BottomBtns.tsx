@@ -24,7 +24,9 @@ type BottomBtnsProps = {
   newQ: any;
   newAnswer: any;
   importanceObj: any;
+  setNowDomain: any;
   nowDomain: any;
+  setNowSubDomain: any;
   nowSubDomain: any;
   dataCategories: any;
 };
@@ -44,8 +46,19 @@ const BottomBtns = ({
   importanceObj,
   dataCategories,
   nowDomain,
+  setNowDomain,
   nowSubDomain,
+  setNowSubDomain,
 }: BottomBtnsProps) => {
+  const desc = ['terrible', 'bad', 'normal', 'good', 'wonderful'];
+  const revImportanceObj = {
+    1: 'ONE',
+    2: 'TWO',
+    3: 'THREE',
+    4: 'FOUR',
+    5: 'FIVE',
+  };
+
   const [deleteQuestion] = useMutation(DELETE_QUESTION, {
     refetchQueries: [
       { query: GET_CATEGORIES, variables: { id: 1 } },
@@ -69,12 +82,21 @@ const BottomBtns = ({
     onCompleted: () => {
       alert('저장되었습니다');
       if (
+        match.params.domain &&
         match.params.qNumber >= qList.length &&
         match.params.subdomain !== nowSubDomain
       ) {
         history.push(
           `/solve/${match.params.domain}/${match.params.subdomain}/${match
             .params.qNumber - 1}`,
+        );
+      } else if (
+        match.params.importance &&
+        match.params.qNumber >= qList.length &&
+        Number(match.params.importance) !== rating
+      ) {
+        history.push(
+          `/solve/중요도${match.params.importance}/${match.params.qNumber - 1}`,
         );
       }
     },
@@ -84,20 +106,6 @@ const BottomBtns = ({
   if (!visible) {
     answerButton = '정답 확인';
   }
-
-  console.log(
-    'impor',
-    importanceObj[qList[Number(match.params.qNumber) - 1].importance],
-  );
-
-  const desc = ['terrible', 'bad', 'normal', 'good', 'wonderful'];
-  const revImportanceObj = {
-    1: 'ONE',
-    2: 'TWO',
-    3: 'THREE',
-    4: 'FOUR',
-    5: 'FIVE',
-  };
 
   let newCategory;
   if (dataCategories && dataCategories.getCategories.length > 0) {
@@ -150,28 +158,32 @@ const BottomBtns = ({
           <Col span={8}>
             <Button
               onClick={() => {
-                setEditing(!editing);
-                if (editing) {
-                  setVisible(false);
-                  editQuestion({
-                    variables: {
-                      id: qList[Number(match.params.qNumber) - 1].id,
-                      owner: qList[Number(match.params.qNumber) - 1].owner.id,
-                      category: newCategory.id,
-                      // qList[Number(match.params.qNumber) - 1].category.id,
-                      importance:
-                        revImportanceObj[rating] ||
-                        qList[Number(match.params.qNumber) - 1].importance,
-                      questionContent:
-                        newQ ||
-                        qList[Number(match.params.qNumber) - 1].questionContent,
-                      answer:
-                        newAnswer ||
-                        qList[Number(match.params.qNumber) - 1].answer,
-                    },
-                  });
+                if (!newCategory) {
+                  alert('카테고리 설정이 잘못되었습니다');
                 } else {
-                  setVisible(true);
+                  setEditing(!editing);
+                  if (editing && newCategory) {
+                    setVisible(false);
+                    editQuestion({
+                      variables: {
+                        id: qList[Number(match.params.qNumber) - 1].id,
+                        owner: qList[Number(match.params.qNumber) - 1].owner.id,
+                        category: newCategory.id,
+                        importance:
+                          revImportanceObj[rating] ||
+                          qList[Number(match.params.qNumber) - 1].importance,
+                        questionContent:
+                          newQ ||
+                          qList[Number(match.params.qNumber) - 1]
+                            .questionContent,
+                        answer:
+                          newAnswer ||
+                          qList[Number(match.params.qNumber) - 1].answer,
+                      },
+                    });
+                  } else {
+                    setVisible(true);
+                  }
                 }
               }}
             >
@@ -188,6 +200,13 @@ const BottomBtns = ({
                       importanceObj[
                         qList[Number(match.params.qNumber) - 1].importance
                       ],
+                    );
+                    setNowDomain(
+                      qList[Number(match.params.qNumber) - 1].category.domain,
+                    );
+                    setNowSubDomain(
+                      qList[Number(match.params.qNumber) - 1].category
+                        .subdomain,
                     );
                   }}
                 >
