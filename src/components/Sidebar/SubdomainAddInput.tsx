@@ -3,7 +3,7 @@ import React from 'react';
 type SubdomainAddInputProps = {
   inputEl: any;
   setNewSubdomain: Function;
-  subDomains: any[];
+  allSubDomains: any[];
   idx: number;
   addSubdomain: Function;
   subdomainInputs: boolean[];
@@ -15,7 +15,7 @@ type SubdomainAddInputProps = {
 const SubdomainAddInput = ({
   inputEl,
   setNewSubdomain,
-  subDomains,
+  allSubDomains,
   idx,
   addSubdomain,
   subdomainInputs,
@@ -36,7 +36,8 @@ const SubdomainAddInput = ({
           if ((e.target as HTMLInputElement).value.length === 0) {
             alert('subdomain은 1글자 이상이어야 합니다');
           } else if (
-            subDomains[idx].indexOf((e.target as HTMLInputElement).value) !== -1
+            allSubDomains[idx].indexOf((e.target as HTMLInputElement).value) !==
+            -1
           ) {
             alert('subdomain 이름 중복입니다');
           } else {

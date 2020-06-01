@@ -3,7 +3,7 @@ import { Button } from 'antd';
 
 type SubdomainSaveBtnProps = {
   newSubdomain: string;
-  subDomains: any[];
+  allSubDomains: any[];
   addSubdomain: Function;
   addCategory: Function;
   categories: any[];
@@ -14,7 +14,7 @@ type SubdomainSaveBtnProps = {
 
 const SubdomainSaveBtn = ({
   newSubdomain,
-  subDomains,
+  allSubDomains,
   addSubdomain,
   addCategory,
   categories,
@@ -27,7 +27,7 @@ const SubdomainSaveBtn = ({
       onClick={() => {
         if (newSubdomain.length === 0) {
           alert('subdomain은 1글자 이상이어야 합니다');
-        } else if (subDomains[idx].indexOf(newSubdomain) !== -1) {
+        } else if (allSubDomains[idx].indexOf(newSubdomain) !== -1) {
           alert('subdomain 이름 중복입니다');
         } else {
           addSubdomain(

@@ -1,5 +1,5 @@
 /** @jsx jsx */
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { css, jsx } from '@emotion/core';
 import { Layout, Breadcrumb } from 'antd';
 import useSolvePage from '../hooks/useSolvePage';
@@ -7,6 +7,7 @@ import ContentLayout from '../components/SolvePage/ContentLayout';
 import useCategoryArray from '../hooks/useCategoryArray';
 import BreadcrumbDropdown from '../components/SolvePage/BreadcrumbDropdown';
 import BottomBtns from '../components/SolvePage/BottomBtns';
+import getSubdomains from '../utils/SolvePage/getSubdomains';
 
 const wrapper = css`
   padding: 0 24px 24px;
@@ -41,26 +42,17 @@ function SolveCategory({ match, history }: SolveCategoryProps) {
     visible,
     setRating,
     rating,
+    nowSubDomain,
+    setNowSubDomain,
+    nowDomain,
+    setNowDomain,
   } = useSolvePage();
 
-  const [nowDomain, setNowDomain] = useState<string>(match.params.domain);
-  const [nowSubDomain, setNowSubDomain] = useState<string>(
-    match.params.subdomain,
-  );
   const { domains, categories, dataCategories } = useCategoryArray();
 
-  console.log('categories', categories);
+  const subDomains = getSubdomains({ categories, nowDomain });
 
   if (errorQuestions) console.log(errorQuestions);
-
-  let subDomains;
-  if (categories) {
-    subDomains = categories
-      .filter((elm) => {
-        return Object.keys(elm)[0] === nowDomain;
-      })
-      .map((el) => Object.values<any>(el)[0]);
-  }
 
   let qList;
   let importanceNumber;
@@ -70,7 +62,6 @@ function SolveCategory({ match, history }: SolveCategoryProps) {
         elm.category.domain === match.params.domain &&
         elm.category.subdomain === match.params.subdomain,
     );
-
     if (qList.length > 0) {
       importanceNumber =
         importanceObj[qList[Number(match.params.qNumber) - 1].importance];
@@ -84,7 +75,12 @@ function SolveCategory({ match, history }: SolveCategoryProps) {
   useEffect(() => {
     setNowDomain(match.params.domain);
     setNowSubDomain(match.params.subdomain);
-  }, [match.params.domain, match.params.subdomain]);
+  }, [
+    match.params.domain,
+    match.params.subdomain,
+    setNowDomain,
+    setNowSubDomain,
+  ]);
 
   useEffect(() => {
     setRating(importanceNumber);
