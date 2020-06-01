@@ -1,11 +1,12 @@
 /** @jsx jsx */
-import { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { css, jsx } from '@emotion/core';
 import { Layout, Breadcrumb } from 'antd';
 import useSolvePage from '../hooks/useSolvePage';
 import ContentLayout from '../components/SolvePage/ContentLayout';
 import BottomBtns from '../components/SolvePage/BottomBtns';
 import useCategoryArray from '../hooks/useCategoryArray';
+import BreadcrumbDropdown from '../components/SolvePage/BreadcrumbDropdown';
 
 const wrapper = css`
   padding: 0 24px 24px;
@@ -42,7 +43,19 @@ function SolveImportance({ match, history }: SolveImportanceProps) {
     rating,
   } = useSolvePage();
 
-  const { dataCategories } = useCategoryArray();
+  const [nowDomain, setNowDomain] = useState<string>('');
+  const [nowSubDomain, setNowSubDomain] = useState<string>('');
+
+  const { domains, categories, dataCategories } = useCategoryArray();
+
+  let subDomains;
+  if (categories) {
+    subDomains = categories
+      .filter((elm) => {
+        return Object.keys(elm)[0] === nowDomain;
+      })
+      .map((el) => Object.values<any>(el)[0]);
+  }
 
   if (errorQuestions) console.log(errorQuestions);
 
@@ -65,14 +78,18 @@ function SolveImportance({ match, history }: SolveImportanceProps) {
     setVisible(false);
   }, [setEditing, setVisible, match.params.importance]);
 
-  let nowDomain;
-  let nowSubDomain;
-  if (qList && qList.length > 0) {
-    nowDomain = qList[match.params.qNumber].category.domain;
-    nowSubDomain = qList[match.params.qNumber].category.subdomain;
-  }
+  useEffect(() => {
+    if (qList && qList.length > 0) {
+      setNowDomain(qList[match.params.qNumber - 1].category.domain);
+      setNowSubDomain(qList[match.params.qNumber - 1].category.subdomain);
+    }
+    // eslint-disable-next-line
+  }, [qList.length]);
 
   if (qList.length === 0) return null;
+
+  console.log('nowDomain', nowDomain);
+  console.log('nowSubdomain', nowSubDomain);
 
   return (
     <Layout css={wrapper}>
@@ -80,10 +97,23 @@ function SolveImportance({ match, history }: SolveImportanceProps) {
         <Breadcrumb.Item>{task}</Breadcrumb.Item>
         <Breadcrumb.Item>중요도 {match.params.importance}</Breadcrumb.Item>
         <Breadcrumb.Item>
-          {match.params.qNumber}번 문제{' '}
-          {`(${qList[match.params.qNumber].category.domain} / ${
-            qList[match.params.qNumber].category.subdomain
-          })`}
+          {match.params.qNumber}번 문제 &nbsp;
+          {editing ? (
+            <React.Fragment>
+              (<BreadcrumbDropdown {...{ domains, setNowDomain, nowDomain }} />
+              &nbsp; / &nbsp;
+              <BreadcrumbDropdown
+                {...{
+                  domains: subDomains[0],
+                  setNowDomain: setNowSubDomain,
+                  nowDomain: nowSubDomain,
+                }}
+              />
+              )
+            </React.Fragment>
+          ) : (
+            `(${nowDomain} / ${nowSubDomain})`
+          )}
         </Breadcrumb.Item>
       </Breadcrumb>
       <ContentLayout
@@ -112,7 +142,9 @@ function SolveImportance({ match, history }: SolveImportanceProps) {
             newQ,
             newAnswer,
             importanceObj,
+            setNowDomain,
             nowDomain,
+            setNowSubDomain,
             nowSubDomain,
             dataCategories,
           }}

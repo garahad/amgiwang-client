@@ -150,7 +150,9 @@ function SolveCategory({ match, history }: SolveCategoryProps) {
             newAnswer,
             importanceObj,
             nowDomain,
+            setNowDomain,
             nowSubDomain,
+            setNowSubDomain,
             dataCategories,
           }}
         />
