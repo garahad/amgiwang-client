@@ -58,11 +58,12 @@ const footerCss = css`
 type RegisterProps = {
   match: any;
   location: any;
+  history: any;
 };
 
 // 이렇게 디자인 폼 똑같이 갖다 쓸때 중복 줄이는 법
 
-function Register({ match }: RegisterProps) {
+function Register({ match, history }: RegisterProps) {
   const { data: dataCategories } = useQuery(GET_CATEGORIES, {
     variables: { id: 1 },
   });
@@ -191,6 +192,15 @@ function Register({ match }: RegisterProps) {
                   </Button>
                 </Tooltip>
                 &nbsp;
+                <Button
+                  onClick={() => {
+                    history.push(
+                      `/solve/${match.params.domain}/${match.params.subdomain}/1`,
+                    );
+                  }}
+                >
+                  취소
+                </Button>
               </Col>
               {/* <Col span={8}>
                 <Button onClick={() => setVisible(!visible)}>
