@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
+import { withRouter } from 'react-router-dom';
 import { Layout, Button } from 'antd';
 import { useQuery, useMutation } from '@apollo/react-hooks';
 import {
@@ -24,7 +25,13 @@ const { Sider } = Layout;
 
 // hooks 빼기,
 
-function Sidebar() {
+type SidebarProps = {
+  match: any;
+  location: any;
+  history: any;
+};
+
+function Sidebar({ location }: SidebarProps) {
   const [categoryAdded, setCategoryAdded] = useState<any>(null);
   const [domainVisible, setDomainVisible] = useState<boolean[]>([]);
   const [subdomainInputs, setSubdomainInputs] = useState<boolean[]>([]);
@@ -106,7 +113,7 @@ function Sidebar() {
                             return (
                               // ts 이해 부족
                               <SubdomainList
-                                {...{ ele, elm, dataQuestions }}
+                                {...{ ele, elm, dataQuestions, location }}
                                 key={ele}
                               />
                             );
@@ -144,4 +151,4 @@ function Sidebar() {
   return null;
 }
 
-export default Sidebar;
+export default withRouter(Sidebar);
