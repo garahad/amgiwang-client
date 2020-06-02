@@ -97,7 +97,7 @@ export const EDIT_QUESTION = gql`
 
 export const DELETE_CATEGORY = gql`
   mutation DeleteCategory($id: Int, $domain: String) {
-    deleteQuestion(id: $id, domain: $domain)
+    deleteCategory(id: $id, domain: $domain)
   }
 `;
 

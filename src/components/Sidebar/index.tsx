@@ -91,7 +91,7 @@ function Sidebar({ location }: SidebarProps) {
     };
 
     return (
-      <Sider width="30%" className="site-layout-background">
+      <Sider width="40%" className="site-layout-background">
         {dataWhatSidebar && dataWhatSidebar.whatSidebar === 'category' ? (
           <>
             <DomainAddBtn {...props} />
@@ -113,7 +113,13 @@ function Sidebar({ location }: SidebarProps) {
                             return (
                               // ts 이해 부족
                               <SubdomainList
-                                {...{ ele, elm, dataQuestions, location }}
+                                {...{
+                                  ele,
+                                  elm,
+                                  dataQuestions,
+                                  dataCategories,
+                                  location,
+                                }}
                                 key={ele}
                               />
                             );
