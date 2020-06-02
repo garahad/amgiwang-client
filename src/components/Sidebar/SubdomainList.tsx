@@ -6,12 +6,28 @@ type SubdomainListProps = {
   ele: string;
   elm: any;
   dataQuestions: any;
+  location: any;
 };
 
-const SubdomainList = ({ ele, elm, dataQuestions }: SubdomainListProps) => {
+const SubdomainList = ({
+  ele,
+  elm,
+  dataQuestions,
+  location,
+}: SubdomainListProps) => {
   return (
-    <li key={ele} style={{ marginLeft: '30px' }}>
-      <Link to={`/solve/${Object.keys(elm)[0]}/${ele}/1`}>
+    <li
+      key={ele}
+      style={{
+        marginLeft: '30px',
+      }}
+    >
+      <Link
+        to={`/solve/${Object.keys(elm)[0]}/${ele}/1`}
+        style={{
+          color: location.pathname.split('/')[3] === ele ? 'red' : 'black',
+        }}
+      >
         {ele}
         {`(                              ${
           dataQuestions.getQuestions.filter(
