@@ -10,13 +10,13 @@ import {
 } from '../../graphql/queries';
 import addDomain from '../../utils/Sidebar/addDomain';
 import addSubdomain from '../../utils/Sidebar/addSubdomain';
-import DomainAddBtn from './DomainAddBtn';
+import DomainAddBtn from './DomainAdd/DomainAddBtn';
 import DomainAndBtns from './DomainAndBtns';
 import SubdomainList from './SubdomainList';
-import SubdomainAddInput from './SubdomainAddInput';
-import SubdomainSaveBtn from './SubdomainSaveBtn';
-import SubdomainCancelBtn from './SubdomainCancelBtn';
-import DomainSaveBtn from './DomainSaveBtn';
+import SubdomainAddInput from './SubdomainAdd/SubdomainAddInput';
+import SubdomainAddSaveBtn from './SubdomainAdd/SubdomainAddSaveBtn';
+import SubdomainAddCancelBtn from './SubdomainAdd/SubdomainAddCancelBtn';
+import DomainSaveBtn from './DomainAdd/DomainSaveBtn';
 import ImportanceCates from './ImportanceCates';
 import useCategoryArray from '../../hooks/useCategoryArray';
 
@@ -45,7 +45,6 @@ function Sidebar({ location, history }: SidebarProps) {
     variables: { id: 1 },
   });
   const { data: dataWhatSidebar } = useQuery(WHAT_SIDEBAR);
-
   const [addCategory] = useMutation(ADD_CATEGORY, {
     refetchQueries: [{ query: GET_CATEGORIES, variables: { id: 1 } }],
     onCompleted: () => {
@@ -73,7 +72,6 @@ function Sidebar({ location, history }: SidebarProps) {
     const props = {
       setCategoryAdded,
       inputEl,
-      setNewDomain,
       domains,
       addDomain,
       addCategory,
@@ -81,12 +79,17 @@ function Sidebar({ location, history }: SidebarProps) {
       subdomainInputs,
       setDomainVisible,
       domainVisible,
+      newSubdomain,
       setNewSubdomain,
       allSubDomains,
       addSubdomain,
       categories,
-      newSubdomain,
       newDomain,
+      setNewDomain,
+      dataQuestions,
+      dataCategories,
+      location,
+      history,
     };
 
     return (
@@ -104,8 +107,6 @@ function Sidebar({ location, history }: SidebarProps) {
                         ...newProps,
                         elm,
                         newProps,
-                        history,
-                        dataCategories,
                       }}
                     />
 
@@ -116,14 +117,9 @@ function Sidebar({ location, history }: SidebarProps) {
                               // ts 이해 부족
                               <SubdomainList
                                 {...{
+                                  ...props,
                                   ele,
                                   elm,
-                                  dataQuestions,
-                                  dataCategories,
-                                  location,
-                                  history,
-                                  newSubdomain,
-                                  setNewSubdomain,
                                 }}
                                 key={ele}
                               />
@@ -135,19 +131,15 @@ function Sidebar({ location, history }: SidebarProps) {
                     {domainVisible[key] && subdomainInputs[key] ? (
                       <span>
                         <SubdomainAddInput {...newProps} />
-                        <SubdomainSaveBtn {...newProps} />
-                        <SubdomainCancelBtn {...newProps} />
+                        <SubdomainAddSaveBtn {...newProps} />
+                        <SubdomainAddCancelBtn {...newProps} />
                       </span>
                     ) : null}
                   </ul>
                 );
               })}
               {categoryAdded}
-              <span
-                style={
-                  categoryAdded ? { display: 'inline' } : { display: 'none' }
-                }
-              >
+              <span style={{ display: categoryAdded ? 'inline' : 'none' }}>
                 <DomainSaveBtn {...props} />
                 <Button onClick={() => setCategoryAdded(null)}>취소</Button>
               </span>

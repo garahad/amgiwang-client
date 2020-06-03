@@ -1,15 +1,12 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React from 'react';
 import { Button } from 'antd';
 import { UserOutlined } from '@ant-design/icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faPen, faTrashAlt } from '@fortawesome/free-solid-svg-icons';
-import { useMutation } from '@apollo/react-hooks';
-import SubdomainAddBtn from './SubdomainAddBtn';
-import {
-  DELETE_CATEGORY,
-  GET_CATEGORIES,
-  EDIT_CATEGORY,
-} from '../../graphql/queries';
+import { faTrashAlt } from '@fortawesome/free-solid-svg-icons';
+import SubdomainAddBtn from './SubdomainAdd/SubdomainAddBtn';
+import CategoryEditBtn from './CategoryEdit/CategoryEditBtn';
+import CategoryEditCancelBtn from './CategoryEdit/CategoryEditCancelBtn';
+import useMutateCategory from '../../hooks/useMutateCategory';
 
 type DomainAndBtnsProps = {
   setDomainVisible: Function;
@@ -39,24 +36,13 @@ const DomainAndBtns = ({
   history,
   dataCategories,
 }: DomainAndBtnsProps) => {
-  const [editing, setEditing] = useState<boolean>(false);
-
-  const [deleteCategory] = useMutation(DELETE_CATEGORY, {
-    refetchQueries: [{ query: GET_CATEGORIES, variables: { id: 1 } }],
-    onCompleted: () => {
-      alert('삭제되었습니다');
-      history.push('/');
-    },
-  });
-  const [editCategory] = useMutation(EDIT_CATEGORY, {
-    refetchQueries: [{ query: GET_CATEGORIES, variables: { id: 1 } }],
-  });
-
-  const inputEl = useRef() as any;
-
-  useEffect(() => {
-    if (inputEl && inputEl.current) inputEl.current.focus();
-  }, [inputEl, editing]);
+  const {
+    editing,
+    setEditing,
+    inputEl,
+    deleteCategory,
+    editCategory,
+  } = useMutateCategory({ history });
 
   const selectedCategories = dataCategories.getCategories.filter(
     (oneCate) => oneCate.domain === Object.keys(elm)[0],
@@ -128,28 +114,14 @@ const DomainAndBtns = ({
                   },
                 });
               });
-              // editCategory({variables: ); 이거는 애매한 면이 있는게 카테고리 서브카테고리 다 있어야 해서. 각각 id 다 적고, domain, subdomain 다 적는 식이 돼야 할듯.
             }}
           >
             저장
           </Button>
-          <Button
-            onClick={() => {
-              setEditing(false);
-              setNewDomain(Object.keys(elm)[0]);
-            }}
-          >
-            취소
-          </Button>
+          <CategoryEditCancelBtn {...{ setEditing }} />
         </>
       ) : (
-        <Button
-          onClick={() => {
-            setEditing(true);
-          }}
-        >
-          <FontAwesomeIcon icon={faPen} />
-        </Button>
+        <CategoryEditBtn {...{ setEditing }} />
       )}
     </>
   );

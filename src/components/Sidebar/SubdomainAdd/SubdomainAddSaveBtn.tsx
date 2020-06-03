@@ -1,7 +1,7 @@
 import React from 'react';
 import { Button } from 'antd';
 
-type SubdomainSaveBtnProps = {
+type SubdomainAddSaveBtnProps = {
   newSubdomain: string;
   allSubDomains: any[];
   addSubdomain: Function;
@@ -12,7 +12,7 @@ type SubdomainSaveBtnProps = {
   subdomainInputs: boolean[];
 };
 
-const SubdomainSaveBtn = ({
+const SubdomainAddSaveBtn = ({
   newSubdomain,
   allSubDomains,
   addSubdomain,
@@ -21,7 +21,7 @@ const SubdomainSaveBtn = ({
   idx,
   setSubdomainInputs,
   subdomainInputs,
-}: SubdomainSaveBtnProps) => {
+}: SubdomainAddSaveBtnProps) => {
   return (
     <Button
       onClick={() => {
@@ -47,4 +47,4 @@ const SubdomainSaveBtn = ({
   );
 };
 
-export default SubdomainSaveBtn;
+export default SubdomainAddSaveBtn;
