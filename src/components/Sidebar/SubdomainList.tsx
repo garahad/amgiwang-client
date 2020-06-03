@@ -1,14 +1,11 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React from 'react';
 import { Link } from 'react-router-dom';
 import { Button } from 'antd';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faPen, faTrashAlt, faPlus } from '@fortawesome/free-solid-svg-icons';
-import { useMutation } from '@apollo/react-hooks';
-import {
-  DELETE_CATEGORY,
-  GET_CATEGORIES,
-  EDIT_CATEGORY,
-} from '../../graphql/queries';
+import { faTrashAlt, faPlus } from '@fortawesome/free-solid-svg-icons';
+import CategoryEditBtn from './CategoryEdit/CategoryEditBtn';
+import CategoryEditCancelBtn from './CategoryEdit/CategoryEditCancelBtn';
+import useMutateCategory from '../../hooks/useMutateCategory';
 
 type SubdomainListProps = {
   ele: string;
@@ -31,27 +28,17 @@ const SubdomainList = ({
   newSubdomain,
   setNewSubdomain,
 }: SubdomainListProps) => {
-  const [editing, setEditing] = useState<boolean>(false);
-  const inputEl = useRef() as any;
-  const [deleteCategory] = useMutation(DELETE_CATEGORY, {
-    refetchQueries: [{ query: GET_CATEGORIES, variables: { id: 1 } }],
-    onCompleted: () => {
-      alert('삭제되었습니다');
-      history.push('/');
-    },
-  });
-
-  const [editCategory] = useMutation(EDIT_CATEGORY, {
-    refetchQueries: [{ query: GET_CATEGORIES, variables: { id: 1 } }],
-  });
+  const {
+    editing,
+    setEditing,
+    inputEl,
+    deleteCategory,
+    editCategory,
+  } = useMutateCategory({ history });
 
   const [selectedSubdomain] = dataCategories.getCategories.filter(
     (oneSubd) => oneSubd.subdomain === ele,
   );
-
-  useEffect(() => {
-    if (inputEl && inputEl.current) inputEl.current.focus();
-  }, [inputEl, editing]);
 
   return (
     <li
@@ -74,7 +61,7 @@ const SubdomainList = ({
             onChange={(e) => setNewSubdomain(e.target.value)}
           />
         ) : (
-          <span>
+          <>
             {ele}
             {`(${
               dataQuestions.getQuestions.filter(
@@ -84,7 +71,7 @@ const SubdomainList = ({
               ).length
             }
             )`}
-          </span>
+          </>
         )}
       </Link>
       <Button>
@@ -117,6 +104,7 @@ const SubdomainList = ({
         <>
           <Button
             onClick={() => {
+              setEditing(false);
               editCategory({
                 variables: {
                   id: selectedSubdomain.id,
@@ -128,22 +116,10 @@ const SubdomainList = ({
           >
             저장
           </Button>
-          <Button
-            onClick={() => {
-              setEditing(false);
-            }}
-          >
-            취소
-          </Button>
+          <CategoryEditCancelBtn {...{ setEditing }} />
         </>
       ) : (
-        <Button
-          onClick={() => {
-            setEditing(true);
-          }}
-        >
-          <FontAwesomeIcon icon={faPen} />
-        </Button>
+        <CategoryEditBtn {...{ setEditing }} />
       )}
     </li>
   );

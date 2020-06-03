@@ -1,17 +1,17 @@
 import React from 'react';
 import { Button } from 'antd';
 
-type SubdomainCancelBtn = {
+type SubdomainAddCancelBtn = {
   setSubdomainInputs: any;
   subdomainInputs: any;
   idx: any;
 };
 
-const SubdomainCancelBtn = ({
+const SubdomainAddCancelBtn = ({
   setSubdomainInputs,
   subdomainInputs,
   idx,
-}: SubdomainCancelBtn) => {
+}: SubdomainAddCancelBtn) => {
   return (
     <Button
       onClick={() => {
@@ -30,4 +30,4 @@ const SubdomainCancelBtn = ({
   );
 };
 
-export default SubdomainCancelBtn;
+export default SubdomainAddCancelBtn;
