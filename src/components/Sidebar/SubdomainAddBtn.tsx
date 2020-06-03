@@ -1,5 +1,7 @@
 import React from 'react';
 import { Button } from 'antd';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faPlus } from '@fortawesome/free-solid-svg-icons';
 
 type SubdomainAddBtnProps = {
   setSubdomainInputs: Function;
@@ -35,7 +37,7 @@ const SubdomainAddBtn = ({
         setCategoryAdded(null);
       }}
     >
-      +
+      <FontAwesomeIcon icon={faPlus} />
     </Button>
   );
 };
