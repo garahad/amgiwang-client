@@ -11,8 +11,7 @@ import {
 import addDomain from '../../utils/Sidebar/addDomain';
 import addSubdomain from '../../utils/Sidebar/addSubdomain';
 import DomainAddBtn from './DomainAddBtn';
-import DomainToggleBtn from './DomainToggleBtn';
-import SubdomainAddBtn from './SubdomainAddBtn';
+import DomainAndBtns from './DomainAndBtns';
 import SubdomainList from './SubdomainList';
 import SubdomainAddInput from './SubdomainAddInput';
 import SubdomainSaveBtn from './SubdomainSaveBtn';
@@ -31,7 +30,7 @@ type SidebarProps = {
   history: any;
 };
 
-function Sidebar({ location }: SidebarProps) {
+function Sidebar({ location, history }: SidebarProps) {
   const [categoryAdded, setCategoryAdded] = useState<any>(null);
   const [domainVisible, setDomainVisible] = useState<boolean[]>([]);
   const [subdomainInputs, setSubdomainInputs] = useState<boolean[]>([]);
@@ -100,13 +99,16 @@ function Sidebar({ location }: SidebarProps) {
                 const newProps = { ...props, idx: key };
                 return (
                   <ul key={Object.keys(elm)[0] as any}>
-                    <DomainToggleBtn
+                    <DomainAndBtns
                       {...{
                         ...newProps,
                         elm,
+                        newProps,
+                        history,
+                        dataCategories,
                       }}
                     />
-                    <SubdomainAddBtn {...newProps} />
+
                     {domainVisible[key]
                       ? Object.values<any>(elm)[0]!.map((ele) => {
                           if (ele.length > 0) {
@@ -119,6 +121,9 @@ function Sidebar({ location }: SidebarProps) {
                                   dataQuestions,
                                   dataCategories,
                                   location,
+                                  history,
+                                  newSubdomain,
+                                  setNewSubdomain,
                                 }}
                                 key={ele}
                               />
