@@ -44,7 +44,7 @@ const DomainAndBtns = ({
     editCategory,
   } = useMutateCategory({ history });
 
-  const selectedCategories = dataCategories.getCategories.filter(
+  const relevantSubCategories = dataCategories.getCategories.filter(
     (oneCate) => oneCate.domain === Object.keys(elm)[0],
   );
 
@@ -69,6 +69,9 @@ const DomainAndBtns = ({
                 return el;
               }),
             );
+          }
+          if (relevantSubCategories.length === 1) {
+            alert('아직 하위 카테고리가 없습니다');
           }
         }}
       >
@@ -105,7 +108,7 @@ const DomainAndBtns = ({
           <Button
             onClick={() => {
               setEditing(false);
-              selectedCategories.forEach((oneSubCate) => {
+              relevantSubCategories.forEach((oneSubCate) => {
                 editCategory({
                   variables: {
                     id: oneSubCate.id,

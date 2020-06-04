@@ -91,7 +91,7 @@ function SolveCategory({ match, history }: SolveCategoryProps) {
     setVisible(false);
   }, [setEditing, setVisible, match.params.subdomain]);
 
-  if (qList.length === 0) return null;
+  if (qList.length === 0) return <div>아직 문제가 없어요 </div>;
 
   return (
     <Layout css={wrapper}>

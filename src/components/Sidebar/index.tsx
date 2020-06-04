@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { withRouter } from 'react-router-dom';
-import { Layout, Button } from 'antd';
+import { Layout } from 'antd';
 import { useQuery, useMutation } from '@apollo/react-hooks';
 import {
   GET_CATEGORIES,
@@ -14,9 +14,6 @@ import DomainAddBtn from './DomainAdd/DomainAddBtn';
 import DomainAndBtns from './DomainAndBtns';
 import SubdomainList from './SubdomainList';
 import SubdomainAddInput from './SubdomainAdd/SubdomainAddInput';
-import SubdomainAddSaveBtn from './SubdomainAdd/SubdomainAddSaveBtn';
-import SubdomainAddCancelBtn from './SubdomainAdd/SubdomainAddCancelBtn';
-import DomainSaveBtn from './DomainAdd/DomainSaveBtn';
 import ImportanceCates from './ImportanceCates';
 import useCategoryArray from '../../hooks/useCategoryArray';
 
@@ -96,7 +93,7 @@ function Sidebar({ location, history }: SidebarProps) {
       <Sider width="40%" className="site-layout-background">
         {dataWhatSidebar && dataWhatSidebar.whatSidebar === 'category' ? (
           <>
-            <DomainAddBtn {...props} />
+            <DomainAddBtn {...{ ...props, props }} />
             <ul>
               {categories.map((elm, key) => {
                 const newProps = { ...props, idx: key };
@@ -129,20 +126,12 @@ function Sidebar({ location, history }: SidebarProps) {
                         })
                       : null}
                     {domainVisible[key] && subdomainInputs[key] ? (
-                      <span>
-                        <SubdomainAddInput {...newProps} />
-                        <SubdomainAddSaveBtn {...newProps} />
-                        <SubdomainAddCancelBtn {...newProps} />
-                      </span>
+                      <SubdomainAddInput {...{ ...newProps, newProps }} />
                     ) : null}
                   </ul>
                 );
               })}
               {categoryAdded}
-              <span style={{ display: categoryAdded ? 'inline' : 'none' }}>
-                <DomainSaveBtn {...props} />
-                <Button onClick={() => setCategoryAdded(null)}>취소</Button>
-              </span>
             </ul>
           </>
         ) : (

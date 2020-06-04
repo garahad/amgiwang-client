@@ -2,27 +2,14 @@ import React from 'react';
 import { Button } from 'antd';
 
 type SubdomainAddCancelBtn = {
-  setSubdomainInputs: any;
-  subdomainInputs: any;
-  idx: any;
+  cancelInput: Function;
 };
 
-const SubdomainAddCancelBtn = ({
-  setSubdomainInputs,
-  subdomainInputs,
-  idx,
-}: SubdomainAddCancelBtn) => {
+const SubdomainAddCancelBtn = ({ cancelInput }: SubdomainAddCancelBtn) => {
   return (
     <Button
-      onClick={() => {
-        setSubdomainInputs(
-          subdomainInputs.map((elme, elmKey) => {
-            if (idx === elmKey) {
-              return false;
-            }
-            return elme;
-          }),
-        );
+      onMouseDown={() => {
+        cancelInput();
       }}
     >
       취소
