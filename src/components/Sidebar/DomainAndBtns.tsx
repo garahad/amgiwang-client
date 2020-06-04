@@ -1,3 +1,5 @@
+/** @jsx jsx */
+import { css, jsx } from '@emotion/core';
 import React, { useState } from 'react';
 import { Button } from 'antd';
 import { UserOutlined } from '@ant-design/icons';
@@ -7,6 +9,11 @@ import SubdomainAddBtn from './SubdomainAdd/SubdomainAddBtn';
 import CategoryEditBtn from './CategoryEdit/CategoryEditBtn';
 import CategoryEditCancelBtn from './CategoryEdit/CategoryEditCancelBtn';
 import useMutateCategory from '../../hooks/useMutateCategory';
+
+const oneDomainCss = css`
+  padding-bottom: 10px;
+  font-size: 20px;
+`;
 
 type DomainAndBtnsProps = {
   setDomainVisible: Function;
@@ -49,11 +56,10 @@ const DomainAndBtns = ({
     (oneCate) => oneCate.domain === Object.keys(elm)[0],
   );
 
-  console.log('editing', editing);
-
   return (
-    <>
+    <React.Fragment>
       <div
+        css={oneDomainCss}
         onClick={() => {
           if (!editing) {
             setDomainVisible(
@@ -92,7 +98,7 @@ const DomainAndBtns = ({
           Object.keys(elm)[0]
         )}
         {btnsVisible ? (
-          <>
+          <React.Fragment>
             <SubdomainAddBtn {...newProps} />
             <Button
               onClick={() => {
@@ -109,13 +115,13 @@ const DomainAndBtns = ({
             >
               <FontAwesomeIcon icon={faTrashAlt} />
             </Button>
-          </>
+          </React.Fragment>
         ) : null}
         {btnsVisible && !editing ? (
           <CategoryEditBtn {...{ setEditing }} />
         ) : null}
         {editing ? (
-          <>
+          <React.Fragment>
             <Button
               onClick={() => {
                 setEditing(false);
@@ -133,68 +139,10 @@ const DomainAndBtns = ({
               저장
             </Button>
             <CategoryEditCancelBtn {...{ setEditing }} />
-          </>
+          </React.Fragment>
         ) : null}
       </div>
-      {/* {btnsVisible ? (
-        <>
-          <SubdomainAddBtn {...newProps} />
-          <Button
-            onClick={() => {
-              if (
-                window.confirm(
-                  '카테고리를 삭제하겠습니까? 하위 코테고리 및 문제들이 같이 삭제됩니다',
-                )
-              ) {
-                deleteCategory({
-                  variables: { domain: Object.keys(elm)[0] },
-                });
-              }
-            }}
-          >
-            <FontAwesomeIcon icon={faTrashAlt} />
-          </Button>
-        </>
-      ) : null} */}
-      {/* <SubdomainAddBtn {...newProps} />
-      <Button
-        onClick={() => {
-          if (
-            window.confirm(
-              '카테고리를 삭제하겠습니까? 하위 코테고리 및 문제들이 같이 삭제됩니다',
-            )
-          ) {
-            deleteCategory({
-              variables: { domain: Object.keys(elm)[0] },
-            });
-          }
-        }}
-      >
-        <FontAwesomeIcon icon={faTrashAlt} />
-      </Button> */}
-      {/* {editing ? (
-        <>
-          <Button
-            onClick={() => {
-              setEditing(false);
-              relevantSubCategories.forEach((oneSubCate) => {
-                editCategory({
-                  variables: {
-                    id: oneSubCate.id,
-                    domain: newDomain,
-                    subdomain: oneSubCate.subdomain,
-                  },
-                });
-              });
-            }}
-          >
-            저장
-          </Button>
-          <CategoryEditCancelBtn {...{ setEditing }} />
-        </>
-      ) : null} */}
-      {/* {(btnsVisible as any) ? <CategoryEditBtn {...{ setEditing }} /> : null} */}
-    </>
+    </React.Fragment>
   );
 };
 

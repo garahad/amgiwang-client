@@ -13,6 +13,8 @@ type SubdomainAddInputProps = {
   categories: any[];
   addCategory: Function;
   newProps: any;
+  domainVisible: any[];
+  setDomainVisible: Function;
 };
 
 const SubdomainAddInput = ({
@@ -26,6 +28,8 @@ const SubdomainAddInput = ({
   categories,
   addCategory,
   newProps,
+  domainVisible,
+  setDomainVisible,
 }: SubdomainAddInputProps) => {
   const saveInput = (e) => {
     if ((e.target as HTMLInputElement).value.length === 0) {
@@ -50,6 +54,14 @@ const SubdomainAddInput = ({
   const cancelInput = () => {
     setSubdomainInputs(
       subdomainInputs.map((elme, elmKey) => {
+        if (idx === elmKey) {
+          return false;
+        }
+        return elme;
+      }),
+    );
+    setDomainVisible(
+      domainVisible.map((elme, elmKey) => {
         if (idx === elmKey) {
           return false;
         }

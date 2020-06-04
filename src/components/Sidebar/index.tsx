@@ -97,6 +97,10 @@ function Sidebar({ location, history }: SidebarProps) {
             <ul>
               {categories.map((elm, key) => {
                 const newProps = { ...props, idx: key };
+
+                console.log('domainVisible[key]', domainVisible[key]);
+                console.log('subdomainInputs[key]', subdomainInputs);
+
                 return (
                   <ul key={Object.keys(elm)[0] as any}>
                     <DomainAndBtns

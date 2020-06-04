@@ -22,10 +22,9 @@ const SubdomainAddBtn = ({
 }: SubdomainAddBtnProps) => {
   return (
     <Button
-      onClick={() => {
-        setSubdomainInputs(
-          subdomainInputs.map((elme, elmKey) => idx === elmKey),
-        );
+      onClick={(e) => {
+        e.stopPropagation();
+        setSubdomainInputs(subdomainInputs.map((_, elmKey) => idx === elmKey));
         setDomainVisible(
           domainVisible.map((elme, elmKey) => {
             if (idx === elmKey) {
