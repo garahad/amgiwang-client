@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Button } from 'antd';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -36,6 +36,8 @@ const SubdomainList = ({
     editCategory,
   } = useMutateCategory({ history });
 
+  const [btnsVisible, setBtnsVisible] = useState<boolean>(false);
+
   const [selectedSubdomain] = dataCategories.getCategories.filter(
     (oneSubd) => oneSubd.subdomain === ele,
   );
@@ -46,6 +48,8 @@ const SubdomainList = ({
       style={{
         marginLeft: '30px',
       }}
+      onMouseEnter={() => setBtnsVisible(true)}
+      onMouseLeave={() => setBtnsVisible(false)}
     >
       <Link
         to={`/solve/${Object.keys(elm)[0]}/${ele}/1`}
@@ -74,32 +78,38 @@ const SubdomainList = ({
           </>
         )}
       </Link>
-      <Button>
-        <Link to={`/register/${Object.keys(elm)[0]}/${ele}`}>
-          <FontAwesomeIcon icon={faPlus} />
-        </Link>
-      </Button>
-      <Button
-        onClick={() => {
-          if (
-            window.confirm(
-              '해당 카테고리를 삭제하시겠습니까? 해당 카테고리의 문제들이 모두 삭제됩니다',
-            )
-          ) {
-            deleteCategory({
-              variables: {
-                id: dataCategories.getCategories.filter(
-                  (oneCate) =>
-                    oneCate.domain === Object.keys(elm)[0] &&
-                    oneCate.subdomain === ele,
-                )[0].id,
-              },
-            });
-          }
-        }}
-      >
-        <FontAwesomeIcon icon={faTrashAlt} />
-      </Button>
+      {btnsVisible ? (
+        <>
+          <Button>
+            <Link to={`/register/${Object.keys(elm)[0]}/${ele}`}>
+              <FontAwesomeIcon icon={faPlus} />
+            </Link>
+          </Button>
+          <Button
+            onClick={() => {
+              if (
+                window.confirm(
+                  '해당 카테고리를 삭제하시겠습니까? 해당 카테고리의 문제들이 모두 삭제됩니다',
+                )
+              ) {
+                deleteCategory({
+                  variables: {
+                    id: dataCategories.getCategories.filter(
+                      (oneCate) =>
+                        oneCate.domain === Object.keys(elm)[0] &&
+                        oneCate.subdomain === ele,
+                    )[0].id,
+                  },
+                });
+              }
+            }}
+          >
+            <FontAwesomeIcon icon={faTrashAlt} />
+          </Button>
+        </>
+      ) : null}
+      {btnsVisible && !editing ? <CategoryEditBtn {...{ setEditing }} /> : null}
+
       {editing ? (
         <>
           <Button
@@ -118,9 +128,7 @@ const SubdomainList = ({
           </Button>
           <CategoryEditCancelBtn {...{ setEditing }} />
         </>
-      ) : (
-        <CategoryEditBtn {...{ setEditing }} />
-      )}
+      ) : null}
     </li>
   );
 };
