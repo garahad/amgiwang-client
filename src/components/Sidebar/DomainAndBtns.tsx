@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Button } from 'antd';
 import { UserOutlined } from '@ant-design/icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -43,14 +43,17 @@ const DomainAndBtns = ({
     deleteCategory,
     editCategory,
   } = useMutateCategory({ history });
+  const [btnsVisible, setBtnsVisible] = useState<boolean>(false);
 
   const relevantSubCategories = dataCategories.getCategories.filter(
     (oneCate) => oneCate.domain === Object.keys(elm)[0],
   );
 
+  console.log('editing', editing);
+
   return (
     <>
-      <Button
+      <div
         onClick={() => {
           if (!editing) {
             setDomainVisible(
@@ -74,6 +77,8 @@ const DomainAndBtns = ({
             alert('아직 하위 카테고리가 없습니다');
           }
         }}
+        onMouseEnter={() => setBtnsVisible(true)}
+        onMouseLeave={() => setBtnsVisible(false)}
       >
         <UserOutlined />
         {editing ? (
@@ -86,8 +91,72 @@ const DomainAndBtns = ({
         ) : (
           Object.keys(elm)[0]
         )}
-      </Button>
-      <SubdomainAddBtn {...newProps} />
+        {btnsVisible ? (
+          <>
+            <SubdomainAddBtn {...newProps} />
+            <Button
+              onClick={() => {
+                if (
+                  window.confirm(
+                    '카테고리를 삭제하겠습니까? 하위 코테고리 및 문제들이 같이 삭제됩니다',
+                  )
+                ) {
+                  deleteCategory({
+                    variables: { domain: Object.keys(elm)[0] },
+                  });
+                }
+              }}
+            >
+              <FontAwesomeIcon icon={faTrashAlt} />
+            </Button>
+          </>
+        ) : null}
+        {btnsVisible && !editing ? (
+          <CategoryEditBtn {...{ setEditing }} />
+        ) : null}
+        {editing ? (
+          <>
+            <Button
+              onClick={() => {
+                setEditing(false);
+                relevantSubCategories.forEach((oneSubCate) => {
+                  editCategory({
+                    variables: {
+                      id: oneSubCate.id,
+                      domain: newDomain,
+                      subdomain: oneSubCate.subdomain,
+                    },
+                  });
+                });
+              }}
+            >
+              저장
+            </Button>
+            <CategoryEditCancelBtn {...{ setEditing }} />
+          </>
+        ) : null}
+      </div>
+      {/* {btnsVisible ? (
+        <>
+          <SubdomainAddBtn {...newProps} />
+          <Button
+            onClick={() => {
+              if (
+                window.confirm(
+                  '카테고리를 삭제하겠습니까? 하위 코테고리 및 문제들이 같이 삭제됩니다',
+                )
+              ) {
+                deleteCategory({
+                  variables: { domain: Object.keys(elm)[0] },
+                });
+              }
+            }}
+          >
+            <FontAwesomeIcon icon={faTrashAlt} />
+          </Button>
+        </>
+      ) : null} */}
+      {/* <SubdomainAddBtn {...newProps} />
       <Button
         onClick={() => {
           if (
@@ -102,8 +171,8 @@ const DomainAndBtns = ({
         }}
       >
         <FontAwesomeIcon icon={faTrashAlt} />
-      </Button>
-      {editing ? (
+      </Button> */}
+      {/* {editing ? (
         <>
           <Button
             onClick={() => {
@@ -123,9 +192,8 @@ const DomainAndBtns = ({
           </Button>
           <CategoryEditCancelBtn {...{ setEditing }} />
         </>
-      ) : (
-        <CategoryEditBtn {...{ setEditing }} />
-      )}
+      ) : null} */}
+      {/* {(btnsVisible as any) ? <CategoryEditBtn {...{ setEditing }} /> : null} */}
     </>
   );
 };
