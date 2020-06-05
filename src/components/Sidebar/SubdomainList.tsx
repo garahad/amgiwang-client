@@ -9,12 +9,41 @@ import CategoryEditBtn from './CategoryEdit/CategoryEditBtn';
 import CategoryEditCancelBtn from './CategoryEdit/CategoryEditCancelBtn';
 import useMutateCategory from '../../hooks/useMutateCategory';
 
-const oneSubdoCss = css`
+const liCss = css`
   margin-left: 30px;
   font-size: 16px;
   padding-top: 5px;
   padding-bottom: 5px;
   list-style-type: circle;
+`;
+const btnCss = css`
+  border-radius: 5px;
+  border: none;
+  color: #999999;
+  background-color: #f2eee6;
+  margin-right: 1px;
+  &:hover {
+    color: #999999;
+    background-color: #f18f6d;
+  }
+`;
+const inputBtnCss = css`
+  border-radius: 5px;
+  border: none;
+  color: black;
+  background-color: #f2eee6;
+  margin-right: 1px;
+  &:hover {
+    color: black;
+    background-color: #f18f6d;
+  }
+`;
+const inputCss = css`
+  width: 50%;
+  &:focus {
+    outline: 0.5px solid #999;
+    border: none;
+  }
 `;
 
 type SubdomainListProps = {
@@ -47,6 +76,7 @@ const SubdomainList = ({
   } = useMutateCategory({ history });
 
   const [btnsVisible, setBtnsVisible] = useState<boolean>(false);
+  const [hovered, setHovered] = useState<boolean>(false);
 
   const [selectedSubdomain] = dataCategories.getCategories.filter(
     (oneSubd) => oneSubd.subdomain === ele,
@@ -55,15 +85,27 @@ const SubdomainList = ({
   return (
     <li
       key={ele}
-      css={oneSubdoCss}
+      css={liCss}
       onMouseEnter={() => setBtnsVisible(true)}
       onMouseLeave={() => setBtnsVisible(false)}
     >
       <Link
         to={`/solve/${Object.keys(elm)[0]}/${ele}/1`}
         style={{
-          color: location.pathname.split('/')[3] === ele ? 'red' : 'black',
+          color:
+            location.pathname.split('/')[3] === ele
+              ? '#F17B67'
+              : hovered
+              ? '#F18F6D'
+              : '#55595C',
         }}
+        onMouseEnter={() => setHovered(true)}
+        onMouseLeave={() => setHovered(false)}
+        // css={css`
+        //   &:hover {
+        //     color: red;
+        //   }
+        // `}
       >
         {editing ? (
           <input
@@ -71,6 +113,7 @@ const SubdomainList = ({
             ref={inputEl}
             defaultValue={ele}
             onChange={(e) => setNewSubdomain(e.target.value)}
+            css={inputCss}
           />
         ) : (
           <React.Fragment>
@@ -89,7 +132,7 @@ const SubdomainList = ({
       &nbsp;
       {btnsVisible ? (
         <React.Fragment>
-          <Button size="small">
+          <Button size="small" css={btnCss}>
             <Link to={`/register/${Object.keys(elm)[0]}/${ele}`}>
               <FontAwesomeIcon icon={faPlus} size="sm" />
             </Link>
@@ -113,6 +156,7 @@ const SubdomainList = ({
               }
             }}
             size="small"
+            css={btnCss}
           >
             <FontAwesomeIcon icon={faTrashAlt} size="sm" />
           </Button>
@@ -133,6 +177,7 @@ const SubdomainList = ({
               });
             }}
             size="small"
+            css={inputBtnCss}
           >
             저장
           </Button>

@@ -12,7 +12,36 @@ import useMutateCategory from '../../hooks/useMutateCategory';
 const oneDomainCss = css`
   padding-top: 10px;
   padding-bottom: 10px;
-  font-size: 20px;
+  font-size: 18px;
+`;
+const btnCss = css`
+  border-radius: 5px;
+  border: none;
+  color: #999999;
+  background-color: #f2eee6;
+  margin-right: 1px;
+  &:hover {
+    color: #999999;
+    background-color: #f18f6d;
+  }
+`;
+const inputBtnCss = css`
+  border-radius: 5px;
+  border: none;
+  color: black;
+  background-color: #f2eee6;
+  margin-right: 1px;
+  &:hover {
+    color: black;
+    background-color: #f18f6d;
+  }
+`;
+const inputCss = css`
+  width: 50%;
+  &:focus {
+    outline: 0.5px solid #999;
+    border: none;
+  }
 `;
 
 type DomainAndBtnsProps = {
@@ -51,6 +80,7 @@ const DomainAndBtns = ({
     editCategory,
   } = useMutateCategory({ history });
   const [btnsVisible, setBtnsVisible] = useState<boolean>(false);
+  const [hovered, setHovered] = useState<boolean>(false);
 
   const relevantSubCategories = dataCategories.getCategories.filter(
     (oneCate) => oneCate.domain === Object.keys(elm)[0],
@@ -82,8 +112,14 @@ const DomainAndBtns = ({
           alert('아직 하위 카테고리가 없습니다');
         }
       }}
-      onMouseEnter={() => setBtnsVisible(true)}
-      onMouseLeave={() => setBtnsVisible(false)}
+      onMouseEnter={() => {
+        setBtnsVisible(true);
+        setHovered(true);
+      }}
+      onMouseLeave={() => {
+        setBtnsVisible(false);
+        setHovered(false);
+      }}
     >
       {editing ? (
         <input
@@ -91,9 +127,12 @@ const DomainAndBtns = ({
           defaultValue={Object.keys(elm)[0]}
           onChange={(e) => setNewDomain(e.target.value)}
           ref={inputEl}
+          css={inputCss}
         />
       ) : (
-        Object.keys(elm)[0]
+        <span style={{ color: hovered ? '#F18F6D' : '#55595C' }}>
+          {Object.keys(elm)[0]}
+        </span>
       )}
       &nbsp;&nbsp;
       {btnsVisible ? (
@@ -112,6 +151,7 @@ const DomainAndBtns = ({
               }
             }}
             size="small"
+            css={btnCss}
           >
             <FontAwesomeIcon icon={faTrashAlt} size="sm" />
           </Button>
@@ -134,6 +174,7 @@ const DomainAndBtns = ({
               });
             }}
             size="small"
+            css={inputBtnCss}
           >
             저장
           </Button>

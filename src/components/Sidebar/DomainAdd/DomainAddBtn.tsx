@@ -6,10 +6,37 @@ import DomainSaveBtn from './DomainSaveBtn';
 const oneDomainCss = css`
   padding-top: 10px;
   padding-bottom: 10px;
-  font-size: 20px;
+  font-size: 18px;
 `;
 const domainUl = css`
   list-style-type: disc;
+`;
+const buttonCss = css`
+  border: none;
+  border-radius: 0px;
+  color: white;
+  background-color: #95bff2;
+  &:hover {
+    background-color: #5075af;
+    color: white;
+  }
+`;
+const inputBtnCss = css`
+  border-radius: 5px;
+  border: none;
+  color: black;
+  background-color: #f2eee6;
+  &:hover {
+    color: black;
+    background-color: #f18f6d;
+  }
+`;
+const inputCss = css`
+  width: 50%;
+  &:focus {
+    outline: 0.5px solid #999;
+    border: none;
+  }
 `;
 
 type DomainAddBtnProps = {
@@ -58,7 +85,6 @@ const DomainAddBtn = ({
             <li css={oneDomainCss}>
               <input
                 ref={inputEl}
-                style={{ width: '50%' }}
                 type="text"
                 placeholder="카테고리 입력"
                 onChange={(e) => setNewDomain(e.target.value)}
@@ -70,10 +96,15 @@ const DomainAddBtn = ({
                   }
                 }}
                 onBlur={(e) => saveInput(e)}
+                css={inputCss}
               />
               &nbsp;
               <DomainSaveBtn {...props} />
-              <Button onMouseDown={() => setCategoryAdded(null)} size="small">
+              <Button
+                onMouseDown={() => setCategoryAdded(null)}
+                size="small"
+                css={inputBtnCss}
+              >
                 취소
               </Button>
             </li>
@@ -81,6 +112,8 @@ const DomainAddBtn = ({
         );
         setSubdomainInputs(subdomainInputs.map(() => false));
       }}
+      css={buttonCss}
+      // type="primary"
     >
       +
     </Button>
