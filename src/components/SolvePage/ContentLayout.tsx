@@ -1,11 +1,16 @@
 /** @jsx jsx */
-import { jsx } from '@emotion/core';
+import { css, jsx } from '@emotion/core';
 import React from 'react';
 import { Layout, Row, Col } from 'antd';
 import IndexBtns from './IndexBtns';
 import QSheet from './QSheet';
 import AnswerSheet from './AnswerSheet';
 
+const indexBtnBoxCss = css`
+  width: 40px;
+  overflow: auto;
+  text-align: center;
+`;
 type ContentLayoutProps = {
   qList: any;
   match: any;
@@ -36,7 +41,7 @@ const ContentLayout = ({
         }}
       >
         <Row gutter={{ xs: 12, md: 24 }}>
-          <Col span={4}>
+          <Col span={4} css={indexBtnBoxCss}>
             <IndexBtns {...{ qList, match, history, editing }} />
           </Col>
           <Col span={10}>
