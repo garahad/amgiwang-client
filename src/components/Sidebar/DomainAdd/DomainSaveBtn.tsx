@@ -27,8 +27,9 @@ const DomainSaveBtn = ({
           alert('카테고리 이름 중복입니다');
         }
       }}
+      size="small"
     >
-      추가
+      저장
     </Button>
   );
 };

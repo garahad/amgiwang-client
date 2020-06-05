@@ -13,8 +13,9 @@ const CategoryEditBtn = ({ setEditing }: CategoryEditBtnProps) => {
       onClick={() => {
         setEditing(true);
       }}
+      size="small"
     >
-      <FontAwesomeIcon icon={faPen} />
+      <FontAwesomeIcon icon={faPen} size="sm" />
     </Button>
   );
 };

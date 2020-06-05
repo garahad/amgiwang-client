@@ -1,3 +1,5 @@
+/** @jsx jsx */
+import { css, jsx } from '@emotion/core';
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Button } from 'antd';
@@ -6,6 +8,14 @@ import { faTrashAlt, faPlus } from '@fortawesome/free-solid-svg-icons';
 import CategoryEditBtn from './CategoryEdit/CategoryEditBtn';
 import CategoryEditCancelBtn from './CategoryEdit/CategoryEditCancelBtn';
 import useMutateCategory from '../../hooks/useMutateCategory';
+
+const oneSubdoCss = css`
+  margin-left: 30px;
+  font-size: 16px;
+  padding-top: 5px;
+  padding-bottom: 5px;
+  list-style-type: circle;
+`;
 
 type SubdomainListProps = {
   ele: string;
@@ -45,9 +55,7 @@ const SubdomainList = ({
   return (
     <li
       key={ele}
-      style={{
-        marginLeft: '30px',
-      }}
+      css={oneSubdoCss}
       onMouseEnter={() => setBtnsVisible(true)}
       onMouseLeave={() => setBtnsVisible(false)}
     >
@@ -65,7 +73,7 @@ const SubdomainList = ({
             onChange={(e) => setNewSubdomain(e.target.value)}
           />
         ) : (
-          <>
+          <React.Fragment>
             {ele}
             {`(${
               dataQuestions.getQuestions.filter(
@@ -75,14 +83,15 @@ const SubdomainList = ({
               ).length
             }
             )`}
-          </>
+          </React.Fragment>
         )}
       </Link>
+      &nbsp;
       {btnsVisible ? (
-        <>
-          <Button>
+        <React.Fragment>
+          <Button size="small">
             <Link to={`/register/${Object.keys(elm)[0]}/${ele}`}>
-              <FontAwesomeIcon icon={faPlus} />
+              <FontAwesomeIcon icon={faPlus} size="sm" />
             </Link>
           </Button>
           <Button
@@ -103,15 +112,15 @@ const SubdomainList = ({
                 });
               }
             }}
+            size="small"
           >
-            <FontAwesomeIcon icon={faTrashAlt} />
+            <FontAwesomeIcon icon={faTrashAlt} size="sm" />
           </Button>
-        </>
+        </React.Fragment>
       ) : null}
       {btnsVisible && !editing ? <CategoryEditBtn {...{ setEditing }} /> : null}
-
       {editing ? (
-        <>
+        <React.Fragment>
           <Button
             onClick={() => {
               setEditing(false);
@@ -123,11 +132,12 @@ const SubdomainList = ({
                 },
               });
             }}
+            size="small"
           >
             저장
           </Button>
           <CategoryEditCancelBtn {...{ setEditing }} />
-        </>
+        </React.Fragment>
       ) : null}
     </li>
   );

@@ -1,3 +1,5 @@
+/** @jsx jsx */
+import { css, jsx } from '@emotion/core';
 import React, { useState, useEffect, useRef } from 'react';
 import { withRouter } from 'react-router-dom';
 import { Layout } from 'antd';
@@ -18,6 +20,10 @@ import ImportanceCates from './ImportanceCates';
 import useCategoryArray from '../../hooks/useCategoryArray';
 
 const { Sider } = Layout;
+
+const domainUl = css`
+  list-style-type: disc;
+`;
 
 // hooks 빼기,
 
@@ -92,17 +98,13 @@ function Sidebar({ location, history }: SidebarProps) {
     return (
       <Sider width="40%" className="site-layout-background">
         {dataWhatSidebar && dataWhatSidebar.whatSidebar === 'category' ? (
-          <>
+          <React.Fragment>
             <DomainAddBtn {...{ ...props, props }} />
             <ul>
               {categories.map((elm, key) => {
                 const newProps = { ...props, idx: key };
-
-                console.log('domainVisible[key]', domainVisible[key]);
-                console.log('subdomainInputs[key]', subdomainInputs);
-
                 return (
-                  <ul key={Object.keys(elm)[0] as any}>
+                  <ul key={Object.keys(elm)[0] as any} css={domainUl}>
                     <DomainAndBtns
                       {...{
                         ...newProps,
@@ -137,7 +139,7 @@ function Sidebar({ location, history }: SidebarProps) {
               })}
               {categoryAdded}
             </ul>
-          </>
+          </React.Fragment>
         ) : (
           <ImportanceCates />
         )}

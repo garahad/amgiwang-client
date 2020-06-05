@@ -35,8 +35,9 @@ const SubdomainAddBtn = ({
         );
         setCategoryAdded(null);
       }}
+      size="small"
     >
-      <FontAwesomeIcon icon={faPlus} />
+      <FontAwesomeIcon icon={faPlus} size="sm" />
     </Button>
   );
 };
