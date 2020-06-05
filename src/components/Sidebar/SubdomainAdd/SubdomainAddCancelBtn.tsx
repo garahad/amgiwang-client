@@ -11,6 +11,7 @@ const SubdomainAddCancelBtn = ({ cancelInput }: SubdomainAddCancelBtn) => {
       onMouseDown={() => {
         cancelInput();
       }}
+      size="small"
     >
       취소
     </Button>

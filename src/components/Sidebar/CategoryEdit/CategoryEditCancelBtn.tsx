@@ -11,6 +11,7 @@ const CategoryEditCancelBtn = ({ setEditing }: CategoryEditCancelBtnProps) => {
       onClick={() => {
         setEditing(false);
       }}
+      size="small"
     >
       취소
     </Button>

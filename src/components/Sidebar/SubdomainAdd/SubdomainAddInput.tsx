@@ -1,4 +1,6 @@
-import React from 'react';
+/** @jsx jsx */
+import { css, jsx } from '@emotion/core';
+// import React from 'react';
 import SubdomainAddSaveBtn from './SubdomainAddSaveBtn';
 import SubdomainAddCancelBtn from './SubdomainAddCancelBtn';
 
@@ -16,6 +18,14 @@ type SubdomainAddInputProps = {
   domainVisible: any[];
   setDomainVisible: Function;
 };
+
+const oneSubdoCss = css`
+  margin-left: 30px;
+  font-size: 16px;
+  padding-top: 5px;
+  padding-bottom: 5px;
+  list-style-type: circle;
+`;
 
 const SubdomainAddInput = ({
   inputEl,
@@ -71,12 +81,12 @@ const SubdomainAddInput = ({
   };
 
   return (
-    <>
+    <li css={oneSubdoCss}>
       <input
         type="text"
         ref={inputEl}
+        style={{ width: '50%' }}
         placeholder="세부 카테고리 입력"
-        style={{ marginLeft: '15px' }}
         onChange={(e) => setNewSubdomain(e.target.value)}
         onKeyDown={(e) => {
           if (e.keyCode === 13) {
@@ -87,9 +97,10 @@ const SubdomainAddInput = ({
         }}
         onBlur={(e) => saveInput(e)}
       />
+      &nbsp;
       <SubdomainAddSaveBtn {...newProps} />
       <SubdomainAddCancelBtn cancelInput={cancelInput} />
-    </>
+    </li>
   );
 };
 

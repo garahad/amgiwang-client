@@ -1,7 +1,16 @@
-import React from 'react';
+/** @jsx jsx */
+import { css, jsx } from '@emotion/core';
 import { Button } from 'antd';
-import { UserOutlined } from '@ant-design/icons';
 import DomainSaveBtn from './DomainSaveBtn';
+
+const oneDomainCss = css`
+  padding-top: 10px;
+  padding-bottom: 10px;
+  font-size: 20px;
+`;
+const domainUl = css`
+  list-style-type: disc;
+`;
 
 type DomainAddBtnProps = {
   setCategoryAdded: Function;
@@ -45,25 +54,30 @@ const DomainAddBtn = ({
     <Button
       onClick={() => {
         setCategoryAdded(
-          <span>
-            <UserOutlined />
-            <input
-              ref={inputEl}
-              type="text"
-              placeholder="카테고리 입력"
-              onChange={(e) => setNewDomain(e.target.value)}
-              onKeyDown={(e) => {
-                if (e.keyCode === 13) {
-                  saveInput(e);
-                } else if (e.keyCode === 27) {
-                  setCategoryAdded(null);
-                }
-              }}
-              onBlur={(e) => saveInput(e)}
-            />
-            <DomainSaveBtn {...props} />
-            <Button onMouseDown={() => setCategoryAdded(null)}>취소</Button>
-          </span>,
+          <ul css={domainUl}>
+            <li css={oneDomainCss}>
+              <input
+                ref={inputEl}
+                style={{ width: '50%' }}
+                type="text"
+                placeholder="카테고리 입력"
+                onChange={(e) => setNewDomain(e.target.value)}
+                onKeyDown={(e) => {
+                  if (e.keyCode === 13) {
+                    saveInput(e);
+                  } else if (e.keyCode === 27) {
+                    setCategoryAdded(null);
+                  }
+                }}
+                onBlur={(e) => saveInput(e)}
+              />
+              &nbsp;
+              <DomainSaveBtn {...props} />
+              <Button onMouseDown={() => setCategoryAdded(null)} size="small">
+                취소
+              </Button>
+            </li>
+          </ul>,
         );
         setSubdomainInputs(subdomainInputs.map(() => false));
       }}

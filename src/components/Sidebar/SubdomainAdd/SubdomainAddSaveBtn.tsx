@@ -41,6 +41,7 @@ const SubdomainAddSaveBtn = ({
           );
         }
       }}
+      size="small"
     >
       저장
     </Button>

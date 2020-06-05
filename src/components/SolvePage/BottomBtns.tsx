@@ -209,6 +209,7 @@ const BottomBtns = ({
                         .subdomain,
                     );
                   }}
+                  size="small"
                 >
                   취소
                 </Button>
