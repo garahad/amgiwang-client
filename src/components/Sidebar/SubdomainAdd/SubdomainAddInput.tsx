@@ -26,6 +26,13 @@ const oneSubdoCss = css`
   padding-bottom: 5px;
   list-style-type: circle;
 `;
+const inputCss = css`
+  width: 50%;
+  &:focus {
+    outline: 0.5px solid #999;
+    border: none;
+  }
+`;
 
 const SubdomainAddInput = ({
   inputEl,
@@ -85,7 +92,6 @@ const SubdomainAddInput = ({
       <input
         type="text"
         ref={inputEl}
-        style={{ width: '50%' }}
         placeholder="세부 카테고리 입력"
         onChange={(e) => setNewSubdomain(e.target.value)}
         onKeyDown={(e) => {
@@ -96,6 +102,7 @@ const SubdomainAddInput = ({
           }
         }}
         onBlur={(e) => saveInput(e)}
+        css={inputCss}
       />
       &nbsp;
       <SubdomainAddSaveBtn {...newProps} />

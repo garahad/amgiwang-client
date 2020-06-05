@@ -1,5 +1,18 @@
-import React from 'react';
+/** @jsx jsx */
+import { css, jsx } from '@emotion/core';
 import { Button } from 'antd';
+
+const inputBtnCss = css`
+  border-radius: 5px;
+  border: none;
+  color: black;
+  background-color: #f2eee6;
+  margin-right: 1px;
+  &:hover {
+    color: black;
+    background-color: #f18f6d;
+  }
+`;
 
 type DomainSaveBtnProps = {
   newDomain: any;
@@ -28,6 +41,7 @@ const DomainSaveBtn = ({
         }
       }}
       size="small"
+      css={inputBtnCss}
     >
       저장
     </Button>
