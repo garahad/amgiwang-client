@@ -1,23 +1,7 @@
 /** @jsx jsx */
-import { css, jsx } from '@emotion/core';
+import { jsx } from '@emotion/core';
 import { Button } from 'antd';
-
-const indexBtnWrapperCss = css`
-  height: 50vh;
-`;
-const indexBtnCss = css`
-  width: 60%;
-  &:hover {
-    outline: none;
-    border: 0.5px solid #95bff2;
-  }
-  &:focus {
-    outline: none;
-    border: 0.5px solid #95bff2;
-  }
-  text-align: center;
-  padding: 0px;
-`;
+import { indexBtnWrapperCss, indexBtnCss } from '../../css/emotions';
 
 type IndexBtnsProps = {
   qList: any;

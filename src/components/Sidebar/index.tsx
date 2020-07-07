@@ -1,5 +1,5 @@
 /** @jsx jsx */
-import { css, jsx } from '@emotion/core';
+import { jsx } from '@emotion/core';
 import React, { useState, useEffect, useRef } from 'react';
 import { withRouter } from 'react-router-dom';
 import { Layout } from 'antd';
@@ -18,12 +18,9 @@ import SubdomainList from './SubdomainList';
 import SubdomainAddInput from './SubdomainAdd/SubdomainAddInput';
 import ImportanceCates from './ImportanceCates';
 import useCategoryArray from '../../hooks/useCategoryArray';
+import { domainUl } from '../../css/emotions';
 
 const { Sider } = Layout;
-
-const domainUl = css`
-  list-style-type: disc;
-`;
 
 // hooks 빼기,
 
@@ -96,7 +93,7 @@ function Sidebar({ location, history }: SidebarProps) {
     };
 
     return (
-      <Sider width="40%" className="site-layout-background">
+      <Sider width="25%" className="site-layout-background">
         {dataWhatSidebar && dataWhatSidebar.whatSidebar === 'category' ? (
           <React.Fragment>
             <DomainAddBtn {...{ ...props, props }} />

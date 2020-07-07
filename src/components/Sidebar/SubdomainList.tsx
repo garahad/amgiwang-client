@@ -1,5 +1,5 @@
 /** @jsx jsx */
-import { css, jsx } from '@emotion/core';
+import { jsx } from '@emotion/core';
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Button } from 'antd';
@@ -8,43 +8,12 @@ import { faTrashAlt, faPlus } from '@fortawesome/free-solid-svg-icons';
 import CategoryEditBtn from './CategoryEdit/CategoryEditBtn';
 import CategoryEditCancelBtn from './CategoryEdit/CategoryEditCancelBtn';
 import useMutateCategory from '../../hooks/useMutateCategory';
-
-const liCss = css`
-  margin-left: 30px;
-  font-size: 16px;
-  padding-top: 5px;
-  padding-bottom: 5px;
-  list-style-type: circle;
-`;
-const btnCss = css`
-  border-radius: 5px;
-  border: none;
-  color: #999999;
-  background-color: #f2eee6;
-  margin-right: 1px;
-  &:hover {
-    color: #999999;
-    background-color: #f18f6d;
-  }
-`;
-const inputBtnCss = css`
-  border-radius: 5px;
-  border: none;
-  color: black;
-  background-color: #f2eee6;
-  margin-right: 1px;
-  &:hover {
-    color: black;
-    background-color: #f18f6d;
-  }
-`;
-const inputCss = css`
-  width: 50%;
-  &:focus {
-    outline: 0.5px solid #999;
-    border: none;
-  }
-`;
+import {
+  sidebarEditBtnCss,
+  sidebarSubdomainLiCss,
+  sidebarInputBtnCss,
+  sidebarInputCss,
+} from '../../css/emotions';
 
 type SubdomainListProps = {
   ele: string;
@@ -85,7 +54,7 @@ const SubdomainList = ({
   return (
     <li
       key={ele}
-      css={liCss}
+      css={sidebarSubdomainLiCss}
       onMouseEnter={() => setBtnsVisible(true)}
       onMouseLeave={() => setBtnsVisible(false)}
     >
@@ -113,7 +82,7 @@ const SubdomainList = ({
             ref={inputEl}
             defaultValue={ele}
             onChange={(e) => setNewSubdomain(e.target.value)}
-            css={inputCss}
+            css={sidebarInputCss}
           />
         ) : (
           <React.Fragment>
@@ -132,7 +101,7 @@ const SubdomainList = ({
       &nbsp;
       {btnsVisible ? (
         <React.Fragment>
-          <Button size="small" css={btnCss}>
+          <Button size="small" css={sidebarEditBtnCss}>
             <Link to={`/register/${Object.keys(elm)[0]}/${ele}`}>
               <FontAwesomeIcon icon={faPlus} size="sm" />
             </Link>
@@ -156,7 +125,7 @@ const SubdomainList = ({
               }
             }}
             size="small"
-            css={btnCss}
+            css={sidebarEditBtnCss}
           >
             <FontAwesomeIcon icon={faTrashAlt} size="sm" />
           </Button>
@@ -177,7 +146,7 @@ const SubdomainList = ({
               });
             }}
             size="small"
-            css={inputBtnCss}
+            css={sidebarInputBtnCss}
           >
             저장
           </Button>

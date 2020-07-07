@@ -1,22 +1,8 @@
 /** @jsx jsx */
-import { css, jsx } from '@emotion/core';
+import { jsx } from '@emotion/core';
 import React, { useEffect, useRef } from 'react';
 import TextareaAutosize from '@material-ui/core/TextareaAutosize';
-
-const questionTitle = css`
-  background-color: #95bff2;
-  padding: 8px 8px;
-`;
-
-const questionInput = css`
-  background-color: #f2eee6;
-  padding: 8px 8px;
-  height: 50vh;
-`;
-
-const textareaCss = css`
-  width: 100%;
-`;
+import { questionInput, questionTitle, textareaCss } from '../../css/emotions';
 
 type QSheetProps = {
   qList: any;

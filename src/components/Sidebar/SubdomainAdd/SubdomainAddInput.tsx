@@ -1,8 +1,8 @@
 /** @jsx jsx */
-import { css, jsx } from '@emotion/core';
-// import React from 'react';
+import { jsx } from '@emotion/core';
 import SubdomainAddSaveBtn from './SubdomainAddSaveBtn';
 import SubdomainAddCancelBtn from './SubdomainAddCancelBtn';
+import { sidebarSubdomainLiCss, sidebarInputCss } from '../../../css/emotions';
 
 type SubdomainAddInputProps = {
   inputEl: any;
@@ -18,21 +18,6 @@ type SubdomainAddInputProps = {
   domainVisible: any[];
   setDomainVisible: Function;
 };
-
-const oneSubdoCss = css`
-  margin-left: 30px;
-  font-size: 16px;
-  padding-top: 5px;
-  padding-bottom: 5px;
-  list-style-type: circle;
-`;
-const inputCss = css`
-  width: 50%;
-  &:focus {
-    outline: 0.5px solid #999;
-    border: none;
-  }
-`;
 
 const SubdomainAddInput = ({
   inputEl,
@@ -88,7 +73,7 @@ const SubdomainAddInput = ({
   };
 
   return (
-    <li css={oneSubdoCss}>
+    <li css={sidebarSubdomainLiCss}>
       <input
         type="text"
         ref={inputEl}
@@ -102,7 +87,7 @@ const SubdomainAddInput = ({
           }
         }}
         onBlur={(e) => saveInput(e)}
-        css={inputCss}
+        css={sidebarInputCss}
       />
       &nbsp;
       <SubdomainAddSaveBtn {...newProps} />

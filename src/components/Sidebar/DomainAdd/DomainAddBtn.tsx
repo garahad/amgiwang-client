@@ -1,43 +1,14 @@
 /** @jsx jsx */
-import { css, jsx } from '@emotion/core';
+import { jsx } from '@emotion/core';
 import { Button } from 'antd';
 import DomainSaveBtn from './DomainSaveBtn';
-
-const oneDomainCss = css`
-  padding-top: 10px;
-  padding-bottom: 10px;
-  font-size: 18px;
-`;
-const domainUl = css`
-  list-style-type: disc;
-`;
-const buttonCss = css`
-  border: none;
-  border-radius: 0px;
-  color: white;
-  background-color: #95bff2;
-  &:hover {
-    background-color: #5075af;
-    color: white;
-  }
-`;
-const inputBtnCss = css`
-  border-radius: 5px;
-  border: none;
-  color: black;
-  background-color: #f2eee6;
-  &:hover {
-    color: black;
-    background-color: #f18f6d;
-  }
-`;
-const inputCss = css`
-  width: 50%;
-  &:focus {
-    outline: 0.5px solid #999;
-    border: none;
-  }
-`;
+import {
+  oneDomainCss,
+  domainUl,
+  domainAddBtnCss,
+  sidebarInputBtnCss,
+  sidebarInputCss,
+} from '../../../css/emotions';
 
 type DomainAddBtnProps = {
   setCategoryAdded: Function;
@@ -96,14 +67,14 @@ const DomainAddBtn = ({
                   }
                 }}
                 onBlur={(e) => saveInput(e)}
-                css={inputCss}
+                css={sidebarInputCss}
               />
               &nbsp;
               <DomainSaveBtn {...props} />
               <Button
                 onMouseDown={() => setCategoryAdded(null)}
                 size="small"
-                css={inputBtnCss}
+                css={sidebarInputBtnCss}
               >
                 취소
               </Button>
@@ -112,7 +83,7 @@ const DomainAddBtn = ({
         );
         setSubdomainInputs(subdomainInputs.map(() => false));
       }}
-      css={buttonCss}
+      css={domainAddBtnCss}
       // type="primary"
     >
       +

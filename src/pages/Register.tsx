@@ -1,6 +1,6 @@
 /** @jsx jsx */
 import { useState, useEffect, useRef } from 'react';
-import { css, jsx } from '@emotion/core';
+import { jsx } from '@emotion/core';
 import { Layout, Breadcrumb, Button, Row, Col, Rate, Tooltip } from 'antd';
 import TextareaAutosize from '@material-ui/core/TextareaAutosize';
 import { useQuery, useMutation } from '@apollo/react-hooks';
@@ -10,50 +10,16 @@ import {
   GET_QUESTIONS,
 } from '../graphql/queries';
 
-const wrapper = css`
-  padding: 0 24px 24px;
-`;
-
-const breadcrumbCss = css`
-  margin: 16px 0;
-`;
-const textareaCss = css`
-  width: 100%;
-`;
-
-// const contentLayout = css`
-//   padding: 24px,
-//   margin: 0,
-//   min-height: 280,
-//   background: #fff;
-// `;
-
-const questionTitle = css`
-  background-color: #95bff2;
-  padding: 8px 8px;
-`;
-
-const questionInput = css`
-  background-color: #f2eee6;
-  padding: 8px 8px;
-  height: 50vh;
-`;
-
-const answerTitle = css`
-  background-color: #f2a690;
-  padding: 8px 8px;
-`;
-
-const answerInput = css`
-  background-color: #f2decf;
-  padding: 8px 8px;
-  height: 50vh;
-`;
-
-const footerCss = css`
-  text-align: center;
-  background-color: #6c6564;
-`;
+import {
+  footerCss,
+  answerInput,
+  answerTitle,
+  questionInput,
+  questionTitle,
+  textareaCss,
+  breadcrumbCss,
+  wrapper,
+} from '../css/emotions';
 
 type RegisterProps = {
   match: any;

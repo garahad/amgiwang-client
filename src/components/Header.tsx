@@ -1,15 +1,12 @@
 /** @jsx jsx */
 import { withRouter, Link } from 'react-router-dom';
 import { Layout, Menu } from 'antd';
-import { css, jsx } from '@emotion/core';
+import { jsx } from '@emotion/core';
 import { useMutation } from '@apollo/react-hooks';
 import '../css/App.css';
 import { useState } from 'react';
 import { SET_SIDEBAR } from '../graphql/queries';
-
-const logoCss = css`
-  color: white;
-`;
+import { logoCss } from '../css/emotions';
 
 type HeaderProps = {
   history: any;
