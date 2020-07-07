@@ -1,16 +1,12 @@
 /** @jsx jsx */
-import { css, jsx } from '@emotion/core';
+import { jsx } from '@emotion/core';
 import React from 'react';
 import { Layout, Row, Col } from 'antd';
 import IndexBtns from './IndexBtns';
 import QSheet from './QSheet';
 import AnswerSheet from './AnswerSheet';
+import { indexBtnBoxCss } from '../../css/emotions';
 
-const indexBtnBoxCss = css`
-  width: 40px;
-  overflow: auto;
-  text-align: center;
-`;
 type ContentLayoutProps = {
   qList: any;
   match: any;
@@ -37,7 +33,8 @@ const ContentLayout = ({
         style={{
           padding: 24,
           margin: 0,
-          minHeight: 500,
+          height: '10%',
+          // minHeight: 500,
         }}
       >
         <Row gutter={{ xs: 12, md: 24 }}>

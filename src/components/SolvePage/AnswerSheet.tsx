@@ -1,20 +1,8 @@
 /** @jsx jsx */
-import { css, jsx } from '@emotion/core';
+import { jsx } from '@emotion/core';
 import React from 'react';
 import TextareaAutosize from '@material-ui/core/TextareaAutosize';
-
-const answerTitle = css`
-  background-color: #f2a690;
-  padding: 8px 8px;
-`;
-const answerInput = css`
-  background-color: #f2decf;
-  padding: 8px 8px;
-  height: 50vh;
-`;
-const textareaCss = css`
-  width: 100%;
-`;
+import { answerTitle, answerInput, textareaCss } from '../../css/emotions';
 
 type AnswerSheetProps = {
   answerVisible: any;

@@ -16,7 +16,6 @@ import Register from './pages/Register';
 const wrapper = css`
   height: 100vh;
 `;
-
 const footerCss = css`
   text-align: center;
   background-color: #999999;

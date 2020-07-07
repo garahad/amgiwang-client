@@ -1,6 +1,6 @@
 /** @jsx jsx */
 import React, { useEffect } from 'react';
-import { css, jsx } from '@emotion/core';
+import { jsx } from '@emotion/core';
 import { Layout, Breadcrumb } from 'antd';
 import useSolvePage from '../hooks/useSolvePage';
 import ContentLayout from '../components/SolvePage/ContentLayout';
@@ -8,17 +8,7 @@ import BottomBtns from '../components/SolvePage/BottomBtns';
 import useCategoryArray from '../hooks/useCategoryArray';
 import BreadcrumbDropdown from '../components/SolvePage/BreadcrumbDropdown';
 import getSubdomains from '../utils/SolvePage/getSubdomains';
-
-const wrapper = css`
-  padding: 0 24px 24px;
-`;
-const breadcrumbCss = css`
-  margin: 16px 0;
-`;
-const footerCss = css`
-  text-align: center;
-  background-color: #6c6564;
-`;
+import { breadcrumbCss, footerCss, wrapper } from '../css/emotions';
 
 type SolveImportanceProps = {
   match: any;

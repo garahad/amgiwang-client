@@ -1,5 +1,5 @@
 /** @jsx jsx */
-import { css, jsx } from '@emotion/core';
+import { jsx } from '@emotion/core';
 import React, { useState } from 'react';
 import { Button } from 'antd';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -8,41 +8,12 @@ import SubdomainAddBtn from './SubdomainAdd/SubdomainAddBtn';
 import CategoryEditBtn from './CategoryEdit/CategoryEditBtn';
 import CategoryEditCancelBtn from './CategoryEdit/CategoryEditCancelBtn';
 import useMutateCategory from '../../hooks/useMutateCategory';
-
-const oneDomainCss = css`
-  padding-top: 10px;
-  padding-bottom: 10px;
-  font-size: 18px;
-`;
-const btnCss = css`
-  border-radius: 5px;
-  border: none;
-  color: #999999;
-  background-color: #f2eee6;
-  margin-right: 1px;
-  &:hover {
-    color: #999999;
-    background-color: #f18f6d;
-  }
-`;
-const inputBtnCss = css`
-  border-radius: 5px;
-  border: none;
-  color: black;
-  background-color: #f2eee6;
-  margin-right: 1px;
-  &:hover {
-    color: black;
-    background-color: #f18f6d;
-  }
-`;
-const inputCss = css`
-  width: 50%;
-  &:focus {
-    outline: 0.5px solid #999;
-    border: none;
-  }
-`;
+import {
+  oneDomainCss,
+  sidebarEditBtnCss,
+  sidebarInputBtnCss,
+  sidebarInputCss,
+} from '../../css/emotions';
 
 type DomainAndBtnsProps = {
   setDomainVisible: Function;
@@ -127,7 +98,7 @@ const DomainAndBtns = ({
           defaultValue={Object.keys(elm)[0]}
           onChange={(e) => setNewDomain(e.target.value)}
           ref={inputEl}
-          css={inputCss}
+          css={sidebarInputCss}
         />
       ) : (
         <span style={{ color: hovered ? '#F18F6D' : '#55595C' }}>
@@ -151,7 +122,7 @@ const DomainAndBtns = ({
               }
             }}
             size="small"
-            css={btnCss}
+            css={sidebarEditBtnCss}
           >
             <FontAwesomeIcon icon={faTrashAlt} size="sm" />
           </Button>
@@ -174,7 +145,7 @@ const DomainAndBtns = ({
               });
             }}
             size="small"
-            css={inputBtnCss}
+            css={sidebarInputBtnCss}
           >
             저장
           </Button>
